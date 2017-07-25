@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hy-licenses>
+
+	<import name="licenses"        class="java.util.ArrayList" />
+	<import name="license"         class="org.hy.common.license.License" />
+	
+	
+	
+	<licenses>
+	
+		<license id="License">
+			<runTime>:runTime</runTime>
+			<time>:time</time>
+			<format>:format</format>
+			<licenseCode>:licenseCode</licenseCode>
+		</license>
+		
+	</licenses>
+	
+</hy-licenses>

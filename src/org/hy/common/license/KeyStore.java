@@ -19,11 +19,6 @@ import it.sauronsoftware.base64.Base64;
  * 同理，既然是签名，那肯定是不希望有人冒充我发消息，只有我才能发布这个签名，所以可得出：
  *    私钥负责签名，公钥负责验证
  * 
- * 参考：
- *  1. http://www.cnblogs.com/duanxz/archive/2012/12/28/2837197.html
- *  2. http://blog.csdn.net/jingshuaizh/article/details/44461289
- *  3. http://www.it165.net/pro/html/201404/11540.html
- *
  * @author      ZhengWei(HY)
  * @createDate  2017-07-23
  * @version     v1.0
