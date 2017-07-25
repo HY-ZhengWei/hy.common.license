@@ -21,6 +21,17 @@ import org.hy.common.file.FileHelp;
 public final class LicenseFactory
 {
     
+    /**
+     * 生成许可证书
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2017-07-25
+     * @version     v1.0
+     *
+     * @param i_License
+     * @return
+     * @throws IOException
+     */
     @SuppressWarnings("unchecked")
     public static String create(License i_License) throws IOException
     {
