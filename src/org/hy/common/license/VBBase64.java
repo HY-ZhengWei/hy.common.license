@@ -2,6 +2,8 @@ package org.hy.common.license;
 
 import java.util.Arrays;
 
+import org.hy.common.Help;
+
 
 
 
@@ -132,9 +134,14 @@ public class VBBase64
      */
     public static String decode(String i_Password ,String i_Key)
     {
+        if ( Help.isNull(i_Password) || Help.isNull(i_Key) )
+        {
+            return "";
+        }
+        
         String [] v_PwdArr       = StrConv.sFromBase64(i_Password).split(",");
         byte   [] v_KeyBytes     = StrConv.vbFromUnicode(i_Key);
-        int    [] v_PwdCode      = new int[(int)(Math.ceil(v_PwdArr.length / 8) * 8)];   // 为8的倍数
+        int    [] v_PwdCode      = new int[(int)(Math.ceil(v_PwdArr.length / 8) * 8)];   // 扩大为8的倍数
         int    [] v_TempCode     = new int[8];
         byte   [] v_BinCode      = new byte[64];                                         // 存放64位的明文
         byte   [] v_CodeIP       = new byte[64];                                         // 存放IP置换结果
