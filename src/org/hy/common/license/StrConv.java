@@ -38,6 +38,8 @@ package org.hy.common.license;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
+import org.hy.common.ByteHelp;
+
 public class StrConv 
 {
     
@@ -54,6 +56,47 @@ public class StrConv
     private static DataOutputStream      dos;
     
 
+    
+    /**
+     * 与VB中的 StrConv(i_Text ,vbFromUnicode) 功能一样。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-05-21
+     * @version     v1.0
+     *
+     * @param i_Text
+     * @return
+     */
+    public static byte [] vbFromUnicode(String i_Text)
+    {
+        return ByteHelp.toByte(i_Text);
+    }
+    
+    
+    
+    /**
+     * 与VB中的 StrConv(i_Datas ,vbUnicode) 功能一样。
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-05-22
+     * @version     v1.0
+     *
+     * @param i_Datas
+     * @return
+     */
+    public static String vbUnicode(int [] i_Datas)
+    {
+        StringBuilder v_Buffer = new StringBuilder();
+        
+        for (int i=0; i<i_Datas.length; i++)
+        {
+            v_Buffer.append((char)i_Datas[i]);
+        }
+        
+        return v_Buffer.toString();
+    }
+    
+    
 
     public static byte [] stringToByteArray(String val)
     {
