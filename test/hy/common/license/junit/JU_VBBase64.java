@@ -14,9 +14,8 @@ public class JU_VBBase64
     public void test_Decode()
     {
         String v_Password = "MTQyLDIxOSwyNDYsMjExLDIsMTcyLDg3LDEwNCwzNSwxNjQsMzksMTk4LDE5LDE4MSwzLDIyNiwyNDQsMTQ1LDEzLDEzMiwxMjksMjE5LDYzLDEzMQ==";
-        String v_Key      = "795...";
+        String v_Key      = "795";
 
-        
         System.out.println(VBBase64.decode(v_Password ,v_Key));
         
         
