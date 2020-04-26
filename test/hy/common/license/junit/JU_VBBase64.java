@@ -13,7 +13,7 @@ public class JU_VBBase64
     @Test
     public void test_Decode()
     {
-        String v_Password = "MTQyLDIxOSwyNDYsMjExLDIsMTcyLDg3LDEwNCwzNSwxNjQsMzksMTk4LDE5LDE4MSwzLDIyNiwyNDQsMTQ1LDEzLDEzMiwxMjksMjE5LDYzLDEzMQ==";
+        String v_Password = "MjA4LDExMCwyMjksMTUsNSw1LDIwOSw4OSwyMDQsNiwxNDQsNjQsMjE3LDExNSwxMzYsNzksMjMxLDIwMCwxMDUsMTU3LDEzOSw5MCwxNTksMTI1LDIyOSw1MSw1NSw5MSw2OSw1NCwyMDIsODg=";
         String v_Key      = "795";
 
         System.out.println(VBBase64.decode(v_Password ,v_Key));
