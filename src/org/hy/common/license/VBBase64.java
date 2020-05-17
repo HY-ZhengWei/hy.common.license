@@ -14,6 +14,8 @@ import org.hy.common.Help;
  * @author      ZhengWei(HY)
  * @createDate  2019-05-21
  * @version     v1.0
+ *              v2.0  2020-05-16  添加：加密算法
+ *              v2.1  2020-05-17  修正：解密方法，在将内存扩大8倍时，未浮点计算的问题。
  */
 public class VBBase64
 {
@@ -122,6 +124,242 @@ public class VBBase64
     
     
     /**
+     * 加密
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2020-05-16
+     * @version     v1.0
+     *
+     * @param i_Text   明文
+     * @param i_Key    密钥
+     * @return
+     */
+    public static String encrypt(String i_Text ,String i_Key)
+    {
+        if ( Help.isNull(i_Text) )
+        {
+            return "";
+        }
+        
+        byte   [] v_KeyBytes     = StrConv.vbFromUnicode(i_Key);
+        int    [] v_KeyArr       = new int[v_KeyBytes.length];
+        byte   [] v_BinKey       = new byte[64];                                         // 64位二进行制原始密钥
+        byte   [] v_KeyPC_1      = new byte[56];
+        byte   [] v_C0           = new byte[28];
+        byte   [] v_Cx           = new byte[28];
+        byte   [] v_Cy           = new byte[28];
+        byte   [] v_D0           = new byte[28];
+        byte   [] v_Dx           = new byte[28];
+        byte   [] v_Dy           = new byte[28];
+        byte [][] v_K            = new byte[16][48];
+        byte   [] v_TextBytes    = StrConv.vbFromUnicode(i_Text);
+        int    [] v_Text         = new int[v_TextBytes.length];
+        int    [] v_TextCode     = new int[(int)(Math.ceil(v_Text.length / 8D) * 8)];    // 扩大为8的倍数
+        int    [] v_TempCode     = new int[8];
+        byte   [] v_BinCode      = new byte[64];                                         // 存放64位的明文
+        byte   [] v_CodeIP       = new byte[64];                                         // 存放IP置换结果
+        byte   [] v_CodeE        = new byte[48];                                         // E膨胀结果
+        byte   [] v_CodeP        = new byte[32];                                         // P变换结果
+        byte [][] v_CodeS        = new byte[8][6];
+        byte   [] v_S            = new byte[8];                                          // S盒运算8个结果
+        byte   [] v_RetS         = new byte[48];                                         // S盒运算32位结果
+        byte   [] v_R0           = new byte[32];
+        byte   [] v_Rx           = new byte[32];
+        byte   [] v_Ry           = new byte[32];
+        byte   [] v_L0           = new byte[32];
+        byte   [] v_Lx           = new byte[32];
+        byte   [] v_Ly           = new byte[32];
+        int    [] v_RetTemp      = new int[8];                                           // 存放8位密文
+        int    [] v_Ret          = new int[v_TextCode.length];
+        
+        // 因Java中的byte是带符号，与VB的不一样，所以用int类型保存密码的byte[]数组
+        for (int i=0; i<v_KeyBytes.length; i++)
+        {
+            v_KeyArr[i] = v_KeyBytes[i];
+        }
+        
+        for (int i=0; i<8 && i <v_KeyArr.length; i++)
+        {
+            for (int x=0; x<=7; x++)
+            {
+                v_BinKey[i * 8 + x] = (byte)Math.floor((v_KeyArr[i] & $BinKeyCalc[x]) / $BinKeyCalc[x]);
+            }
+        }
+        
+        // PC_1转换
+        for (int i=0; i<56; i++)
+        {
+            v_KeyPC_1[i] = v_BinKey[$PC_1[i]];
+        }
+        
+        // 生成C0、D0
+        for (int i=0; i<28; i++)
+        {
+            v_C0[i] = v_KeyPC_1[i];
+            v_D0[i] = v_KeyPC_1[i + 28];
+        }
+        
+        // 生成K
+        v_Cx = Arrays.copyOf(v_C0 ,v_C0.length);
+        v_Dx = Arrays.copyOf(v_D0 ,v_D0.length);
+        for (int i=0; i<16; i++)
+        {
+            makeCD(v_Cx ,v_Dx ,v_Cy ,v_Dy ,i + 1);
+            makeK(v_Cy ,v_Dy ,v_K[i]);
+            
+            v_Cx = Arrays.copyOf(v_Cy ,v_Cy.length);
+            v_Dx = Arrays.copyOf(v_Dy ,v_Dy.length);
+        }
+        
+        // 因Java中的byte是带符号，与VB的不一样，所以用int类型保存密码的byte[]数组
+        for (int i=0; i<v_TextBytes.length; i++)
+        {
+            v_Text[i] = v_TextBytes[i];
+        }
+        
+        for (int j=0; j<v_Text.length; j+=8)
+        {
+            v_TempCode = Arrays.copyOfRange(v_Text ,j ,j + 8);
+            
+            for (int i=0; i<8; i++)
+            {
+                for (int x=0; x<8; x++)
+                {
+                    v_BinCode[i * 8 + x] = (byte)Math.floor((v_TempCode[i] & $BinKeyCalc[x]) / $BinKeyCalc[x]);
+                }
+            }
+            
+            // IP置换
+            for (int i=0; i<64; i++)
+            {
+                v_CodeIP[i] = v_BinCode[$IP[i]];
+            }
+            
+            // 分段
+            for (int i=0; i<32; i++)
+            {
+                v_L0[i] = v_CodeIP[i];                  // 与解密不同：相反
+                v_R0[i] = v_CodeIP[i + 32];             // 与解密不同：相反
+            }
+            
+            // 进行16次迭代
+            v_Rx = Arrays.copyOf(v_R0 ,v_R0.length);
+            v_Lx = Arrays.copyOf(v_L0 ,v_L0.length);
+            for (int z=0; z<16; z++)
+            {
+                if ( z == 0 )
+                {
+                    // 与解密不同
+                    for (int i=0; i<48; i++)
+                    {
+                        v_CodeE[i] = v_Rx[$E[i]];                            // 经过E变换扩充，由32位变为48位
+                        v_CodeE[i] = (byte) (v_CodeE[i] ^ v_K[15 - z][i]);   // 与K按位作不进位加法运算
+                    }
+                }
+                else
+                {
+                    // 与解密不同
+                    for (int i=0; i<48; i++)
+                    {
+                        v_CodeE[i] = v_Rx[$E[i]];                            // 经过E变换扩充，由32位变为48位
+                        v_CodeE[i] = (byte) (v_CodeE[i] ^ v_K[z][i]);        // 与K按位作不进位加法运算
+                    }
+                }
+                
+                // 分8组
+                for (int i=0; i<6; i++)
+                {
+                    for (int x=0; x<8; x++)
+                    {
+                        v_CodeS[x][i] = v_CodeE[i + x * 6];
+                    }
+                }
+                
+                // S盒运算，得到8个数
+                // S盒运算32位结果
+                for (int i=0; i<8; i++)
+                {
+                    v_S[i] = $SS[i] [v_CodeS[i][5] + v_CodeS[i][0] * 2] [v_CodeS[i][4] + v_CodeS[i][3] * 2 + v_CodeS[i][2] * 4 + v_CodeS[i][1] * 8];
+                    
+                    for (int x=0; x<4; x++)
+                    {
+                        v_RetS[i * 4 + x] = (byte)Math.floor((v_S[i] & $BinKeyCalc[x + 4]) / $BinKeyCalc[x + 4]);
+                    }
+                }
+                
+                // P变换，产生Ly、Ry
+                for (int i=0; i<32; i++)
+                {
+                    v_CodeP[i] = v_RetS[$P[i]];
+                    
+                    v_Ry[i] = (byte) (v_Lx[i] ^ v_CodeP[i]);
+                    v_Ly[i] = v_Rx[i];
+                }
+                
+                v_Rx = Arrays.copyOf(v_Ry ,v_Ry.length);
+                v_Lx = Arrays.copyOf(v_Ly ,v_Ly.length);
+            }
+            
+            for (int i=0; i<32; i++)
+            {
+                v_BinCode[i]      = v_Ly[i];    // 与解密不同：相反
+                v_BinCode[i + 32] = v_Ry[i];    // 与解密不同：相反
+            }
+            
+            for (int i=0; i<64; i++)
+            {
+                v_CodeIP[i] = v_BinCode[$IP_1[i]];
+            }
+            
+            for (int i=0; i<8; i++)
+            {
+                v_RetTemp[i] = 0;
+                
+                for (int x=0; x<8; x++)
+                {
+                    v_RetTemp[i] = v_RetTemp[i] + v_CodeIP[i * 8 + x] * $BinKeyCalc[x];
+                }
+                
+                v_Ret[j + i] = v_RetTemp[i];
+            }
+            
+        }
+        
+        StringBuilder v_Buffer = new StringBuilder();
+        for (int i=0; i<v_Ret.length; i++)
+        {
+            v_Buffer.append(v_Ret[i]);
+            
+            if ( i < v_Ret.length - 1 )
+            {   
+                v_Buffer.append(",");
+            }
+        }
+        
+        return StrConv.toBase64(v_Buffer.toString());
+    }
+    
+    
+    
+    /**
+     * 解密
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-05-21
+     * @version     v1.0
+     *
+     * @param i_Password  密文
+     * @param i_Key       密钥
+     * @return
+     */
+    public static String decrypt(String i_Password ,String i_Key)
+    {
+        return decode(i_Password ,i_Key);
+    }
+    
+    
+    
+    /**
      * 解密
      * 
      * @author      ZhengWei(HY)
@@ -141,7 +379,7 @@ public class VBBase64
         
         String [] v_PwdArr       = StrConv.sFromBase64(i_Password).split(",");
         byte   [] v_KeyBytes     = StrConv.vbFromUnicode(i_Key);
-        int    [] v_PwdCode      = new int[(int)(Math.ceil(v_PwdArr.length / 8) * 8)];   // 扩大为8的倍数
+        int    [] v_PwdCode      = new int[(int)(Math.ceil(v_PwdArr.length / 8D) * 8)];  // 扩大为8的倍数
         int    [] v_TempCode     = new int[8];
         byte   [] v_BinCode      = new byte[64];                                         // 存放64位的明文
         byte   [] v_CodeIP       = new byte[64];                                         // 存放IP置换结果
@@ -297,7 +535,7 @@ public class VBBase64
                 
                 for (int x=0; x<8; x++)
                 {
-                    v_RetTemp[i] =v_RetTemp[i] + v_CodeIP[i * 8 + x] * $BinKeyCalc[x];
+                    v_RetTemp[i] = v_RetTemp[i] + v_CodeIP[i * 8 + x] * $BinKeyCalc[x];
                 }
                 
                 v_Ret[j + i] = v_RetTemp[i];

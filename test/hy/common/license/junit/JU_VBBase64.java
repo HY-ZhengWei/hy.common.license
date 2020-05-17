@@ -11,12 +11,12 @@ public class JU_VBBase64
 {
     
     @Test
-    public void test_Decode()
+    public void test_Decrypt()
     {
-        String v_Password = "MjA4LDExMCwyMjksMTUsNSw1LDIwOSw4OSwyMDQsNiwxNDQsNjQsMjE3LDExNSwxMzYsNzksMjMxLDIwMCwxMDUsMTU3LDEzOSw5MCwxNTksMTI1LDIyOSw1MSw1NSw5MSw2OSw1NCwyMDIsODg=";
+        String v_Password = "MjM3LDIzNiw4NywyMDUsMTQzLDEzLDE3MywyMywxNzYsOTcsMTYyLDE2MCwxODksODcsMjQ2LDI0LDE2Niw2NiwxOTMsNjMsNTAsMjA0LDg1LDk5";
         String v_Key      = "795";
 
-        System.out.println(VBBase64.decode(v_Password ,v_Key));
+        System.out.println(VBBase64.decrypt(v_Password ,v_Key));
         
         
         
@@ -41,6 +41,13 @@ public class JU_VBBase64
     
     
     
-    
+    @Test
+    public void test_Encrypt()
+    {
+        String v_Text = "GB78/M4X4/0Cr18Ni9";
+        String v_Key  = "795";
+        
+        System.out.println(VBBase64.encrypt(v_Text ,v_Key));
+    }
     
 }
