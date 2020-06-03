@@ -247,23 +247,11 @@ public class VBBase64
             v_Lx = Arrays.copyOf(v_L0 ,v_L0.length);
             for (int z=0; z<16; z++)
             {
-                if ( z == 0 )
+                // 与解密不同
+                for (int i=0; i<48; i++)
                 {
-                    // 与解密不同
-                    for (int i=0; i<48; i++)
-                    {
-                        v_CodeE[i] = v_Rx[$E[i]];                            // 经过E变换扩充，由32位变为48位
-                        v_CodeE[i] = (byte) (v_CodeE[i] ^ v_K[15 - z][i]);   // 与K按位作不进位加法运算
-                    }
-                }
-                else
-                {
-                    // 与解密不同
-                    for (int i=0; i<48; i++)
-                    {
-                        v_CodeE[i] = v_Rx[$E[i]];                            // 经过E变换扩充，由32位变为48位
-                        v_CodeE[i] = (byte) (v_CodeE[i] ^ v_K[z][i]);        // 与K按位作不进位加法运算
-                    }
+                    v_CodeE[i] = v_Rx[$E[i]];                            // 经过E变换扩充，由32位变为48位
+                    v_CodeE[i] = (byte) (v_CodeE[i] ^ v_K[z][i]);        // 与K按位作不进位加法运算
                 }
                 
                 // 分8组
