@@ -4,7 +4,7 @@
 
   <groupId>org</groupId>
   <artifactId>hy.common.license</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
   <packaging>jar</packaging>
 
   <name>hy.common.license</name>
@@ -35,7 +35,7 @@
 	<dependency>
 	    <groupId>org</groupId>
 	    <artifactId>hy.common.xjava</artifactId>
-	    <version>4.0.6</version>
+	    <version>4.0.7</version>
 	</dependency>
 	
   </dependencies>

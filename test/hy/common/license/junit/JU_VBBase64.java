@@ -1,5 +1,7 @@
 package hy.common.license.junit;
 
+import java.io.UnsupportedEncodingException;
+
 import org.hy.common.license.VBBase64;
 import org.junit.Test;
 
@@ -42,9 +44,9 @@ public class JU_VBBase64
     
     
     @Test
-    public void test_Encrypt()
+    public void test_Encrypt() throws UnsupportedEncodingException
     {
-        String v_Text = "GB78/M4X4/0Cr18Ni9";
+        String v_Text = "HG/T20592 法兰 WN40(B)(B)-63 RF S=2.9mm 20";
         String v_Key  = "795597";
         String v_Pwd  = VBBase64.encrypt(v_Text ,v_Key);
         

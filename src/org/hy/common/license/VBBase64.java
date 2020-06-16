@@ -16,6 +16,7 @@ import org.hy.common.Help;
  * @version     v1.0
  *              v2.0  2020-05-16  添加：加密算法
  *              v2.1  2020-05-17  修正：解密方法，在将内存扩大8倍时，未浮点计算的问题。
+ *              v2.2  2020-06-16  修正：解决加解文本有中文的问题。对无符号、有符号byte、int相互转换。
  */
 public class VBBase64
 {
@@ -124,6 +125,62 @@ public class VBBase64
     
     
     /**
+     * 将字节数组转为无符号的整数。如 -73(byte) 转换为 183(int) 
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2020-06-16
+     * @version     v1.0
+     *
+     * @param i_Value
+     * @return
+     */
+    public static int [] byteToIntArray(byte [] i_Value)
+    {
+        if ( Help.isNull(i_Value) )
+        {
+            return null;
+        }
+        
+        int [] v_Ret = new int[i_Value.length];
+        for (int i=0; i<i_Value.length; i++)
+        {
+            v_Ret[i] = i_Value[i] & 0xFF;
+        }
+        
+        return v_Ret;
+    }
+    
+    
+    
+    /**
+     * 将无符号整数转为有符号的字节数组。如 183(int) 转换为 -73(byte)
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2020-06-16
+     * @version     v1.0
+     *
+     * @param i_Value
+     * @return
+     */
+    public static byte [] intToByteArray(int [] i_Value)
+    {
+        if ( Help.isNull(i_Value) )
+        {
+            return null;
+        }
+        
+        byte [] v_Ret = new byte[i_Value.length];
+        for (int i=0; i<i_Value.length; i++)
+        {
+            v_Ret[i] = (byte)i_Value[i];
+        }
+        
+        return v_Ret;
+    }
+    
+    
+    
+    /**
      * 加密
      * 
      * @author      ZhengWei(HY)
@@ -142,7 +199,7 @@ public class VBBase64
         }
         
         byte   [] v_KeyBytes     = StrConv.vbFromUnicode(i_Key);
-        int    [] v_KeyArr       = new int[v_KeyBytes.length];
+        int    [] v_KeyArr       = null;
         byte   [] v_BinKey       = new byte[64];                                         // 64位二进行制原始密钥
         byte   [] v_KeyPC_1      = new byte[56];
         byte   [] v_C0           = new byte[28];
@@ -153,8 +210,8 @@ public class VBBase64
         byte   [] v_Dy           = new byte[28];
         byte [][] v_K            = new byte[16][48];
         byte   [] v_TextBytes    = StrConv.vbFromUnicode(i_Text);
-        int    [] v_Text         = new int[v_TextBytes.length];
-        int    [] v_TextCode     = new int[(int)(Math.ceil(v_Text.length / 8D) * 8)];    // 扩大为8的倍数
+        int    [] v_Text         = null;
+        int    [] v_TextCode     = new int[(int)(Math.ceil(v_TextBytes.length / 8D) * 8)];    // 扩大为8的倍数
         int    [] v_TempCode     = new int[8];
         byte   [] v_BinCode      = new byte[64];                                         // 存放64位的明文
         byte   [] v_CodeIP       = new byte[64];                                         // 存放IP置换结果
@@ -173,10 +230,7 @@ public class VBBase64
         int    [] v_Ret          = new int[v_TextCode.length];
         
         // 因Java中的byte是带符号，与VB的不一样，所以用int类型保存密码的byte[]数组
-        for (int i=0; i<v_KeyBytes.length; i++)
-        {
-            v_KeyArr[i] = v_KeyBytes[i];
-        }
+        v_KeyArr = byteToIntArray(v_KeyBytes);
         
         for (int i=0; i<8 && i <v_KeyArr.length; i++)
         {
@@ -212,10 +266,7 @@ public class VBBase64
         }
         
         // 因Java中的byte是带符号，与VB的不一样，所以用int类型保存密码的byte[]数组
-        for (int i=0; i<v_TextBytes.length; i++)
-        {
-            v_Text[i] = v_TextBytes[i];
-        }
+        v_Text = byteToIntArray(v_TextBytes);
         
         for (int j=0; j<v_Text.length; j+=8)
         {
@@ -530,7 +581,16 @@ public class VBBase64
             }
         }
         
-        return StrConv.vbUnicode(v_Ret).replaceAll((char)0 + "" ,"");
+        try
+        {
+            return StrConv.vbUnicode(v_Ret).replaceAll((char)0 + "" ,"");
+        }
+        catch (Exception exce)
+        {
+            exce.printStackTrace();
+        }
+        
+        return "";
     }
     
     

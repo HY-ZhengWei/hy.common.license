@@ -37,6 +37,7 @@ package org.hy.common.license;
  */
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.UnsupportedEncodingException;
 
 import org.hy.common.ByteHelp;
 
@@ -69,7 +70,7 @@ public class StrConv
      */
     public static byte [] vbFromUnicode(String i_Text)
     {
-        return ByteHelp.toByte(i_Text);
+        return ByteHelp.toByte(i_Text ,"GBK");
     }
     
     
@@ -83,17 +84,11 @@ public class StrConv
      *
      * @param i_Datas
      * @return
+     * @throws UnsupportedEncodingException 
      */
-    public static String vbUnicode(int [] i_Datas)
+    public static String vbUnicode(int [] i_Datas) throws UnsupportedEncodingException
     {
-        StringBuilder v_Buffer = new StringBuilder();
-        
-        for (int i=0; i<i_Datas.length; i++)
-        {
-            v_Buffer.append((char)i_Datas[i]);
-        }
-        
-        return v_Buffer.toString();
+        return ByteHelp.byteToString(VBBase64.intToByteArray(i_Datas) ,"GBK");
     }
     
     
