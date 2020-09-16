@@ -46,7 +46,7 @@ public class JU_VBBase64
     @Test
     public void test_Encrypt() throws UnsupportedEncodingException
     {
-        String v_Text = "HG/T20592 法兰 WN40(B)(B)-63 RF S=2.9mm 20";
+        String v_Text = "AM27421-2101-5428";
         String v_Key  = "795597";
         String v_Pwd  = VBBase64.encrypt(v_Text ,v_Key);
         
