@@ -32,7 +32,7 @@ public final class Signaturer_V2 implements ISignaturer
     
     public Signaturer_V2(String i_PrivateKey)
     {
-       this(i_PrivateKey.getBytes());
+       this(i_PrivateKey.getBytes(StandardCharsets.UTF_8));
     }
     
     
@@ -59,11 +59,11 @@ public final class Signaturer_V2 implements ISignaturer
         try
         {
             Mac v_Mac = Mac.getInstance("HmacSHA256");
-            v_Mac.init(new SecretKeySpec(i_PlainText.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            v_Mac.init(new SecretKeySpec(privateKey, "HmacSHA256"));
             
-            byte[] v_SignData         = v_Mac.doFinal(this.privateKey);
+            byte[] v_SignData         = v_Mac.doFinal(i_PlainText.getBytes(StandardCharsets.UTF_8));
             String v_SignDataToEnCode = Base64.getEncoder().encodeToString(v_SignData);
-            return URLEncoder.encode(v_SignDataToEnCode, StandardCharsets.UTF_8.toString());
+            return URLEncoder.encode(v_SignDataToEnCode, "UTF-8");
         }
         catch (java.lang.Exception e)
         {

@@ -1,5 +1,7 @@
 package org.hy.common.license;
 
+import java.nio.charset.StandardCharsets;
+
 import org.hy.common.license.sign.ISignaturer;
 import org.hy.common.license.sign.Signaturer_V1;
 import org.hy.common.license.sign.Signaturer_V2;
@@ -31,7 +33,7 @@ public final class Signaturer implements ISignaturer
     
     public Signaturer(String i_PrivateKey)
     {
-        this(1 ,i_PrivateKey.getBytes());
+        this(1 ,i_PrivateKey.getBytes(StandardCharsets.UTF_8));
     }
 
     
@@ -45,7 +47,7 @@ public final class Signaturer implements ISignaturer
     
     public Signaturer(int i_Version ,String i_PrivateKey)
     {
-        this(i_Version ,i_PrivateKey.getBytes());
+        this(i_Version ,i_PrivateKey.getBytes(StandardCharsets.UTF_8));
     }
     
     
