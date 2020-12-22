@@ -97,9 +97,9 @@ public class JU_License
         String v_MachineID = v_Register +  v_License.toString();
         
         KeyStore v_KeyStore  = KeyStore.generater();
-        byte []  v_Sign      = Signaturer.sign(v_KeyStore.getPrivateKey() ,v_MachineID);
+        String   v_Sign      = new Signaturer(v_KeyStore.getPrivateKey()).sign(v_MachineID);
         
-        v_License.setLicenseCode(v_KeyStore.getPublicKeyString() + "#" + new String(v_Sign));
+        v_License.setLicenseCode(v_KeyStore.getPublicKeyString() + "#" + v_Sign);
         
         
         String   v_Contents = LicenseFactory.create(v_License);

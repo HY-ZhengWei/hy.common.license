@@ -20,7 +20,7 @@ import sun.misc.BASE64Encoder;
  * @createDate  2020-09-16
  * @version     v1.0
  */
-public class AES_V2 implements IAES
+public final class AES_V2 implements IAES
 {
     
     private static final String $AES_Cipher  = "AES/CBC/PKCS5Padding";

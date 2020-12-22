@@ -27,13 +27,13 @@ public class JU_SignProvider
     {
         KeyStore v_KeyStore  = KeyStore.generater("A");
         String   v_PlainText = "ABCDEFG";
-        byte []  v_Sign      = Signaturer.sign(v_KeyStore.getPrivateKey() ,v_PlainText);
+        String   v_Sign      = new Signaturer(v_KeyStore.getPrivateKey()).sign(v_PlainText);
         
         System.out.println("-- 公匙：" + v_KeyStore.getPublicKeyString());
         System.out.println("-- 私匙：" + v_KeyStore.getPrivateKeyString());
-        System.out.println("-- 签名：" + new String(v_Sign));
+        System.out.println("-- 签名：" + v_Sign);
         
-        boolean v_Verify = SignProvider.verify(v_KeyStore.getPublicKey() ,v_PlainText ,v_Sign);
+        boolean v_Verify = SignProvider.verify(v_KeyStore.getPublicKey() ,v_PlainText ,v_Sign.getBytes());
         if ( v_Verify )
         {
             System.out.println("验证成功.");

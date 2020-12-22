@@ -25,13 +25,13 @@ public class JU_AES
         AES v_AES_V2 = new AES(2 ,"nkoc2Cr@V0ZVSWFEM");
         
         // mzj0809123456
-        String v_AESPassword = v_AES_V1.encrypt("52140@f77f2e42f6f5464b92344ef5735da329");
+        String v_AESPassword = v_AES_V1.encrypt("52140@3381d50a061a46fcaf90b9779310665d");
         String v_OrgPassword = v_AES_V1.decrypt(v_AESPassword);
         
         System.out.println(v_OrgPassword + " = [" + v_AESPassword + "]");
         System.out.println(v_OrgPassword + " = [" + StringHelp.replaceAll(v_AESPassword ,"+" ,"@") + "]");
         
-        v_AESPassword = v_AES_V2.encrypt("52140@f77f2e42f6f5464b92344ef5735da329");
+        v_AESPassword = v_AES_V2.encrypt("52140@3381d50a061a46fcaf90b9779310665d");
         v_OrgPassword = v_AES_V2.decrypt(v_AESPassword);
         System.out.println(v_OrgPassword + " = [" + v_AESPassword + "]");
         System.out.println(v_OrgPassword + " = [" + StringHelp.replaceAll(v_AESPassword ,"+" ,"@") + "]");

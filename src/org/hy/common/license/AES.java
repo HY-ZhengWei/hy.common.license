@@ -21,7 +21,7 @@ import org.hy.common.license.aes.IAES;
  * @version     v1.0
  *              v2.0  2020-09-16  添加：AES加解密版本2：用于解决Android手机与Java服务AES版本1加密结果不一样的问题。
  */
-public class AES implements IAES
+public final class AES implements IAES
 {
     
     private IAES aes;
@@ -59,7 +59,7 @@ public class AES implements IAES
      * @param i_Content
      * @return
      */
-    public String encrypt(String i_Content)
+    public final String encrypt(String i_Content)
     {
         return this.aes.encrypt(i_Content);
     }
@@ -76,7 +76,7 @@ public class AES implements IAES
      * @param i_Content
      * @return
      */
-    public String decrypt(String i_Content)
+    public final String decrypt(String i_Content)
     {
         return this.aes.decrypt(i_Content);
     }

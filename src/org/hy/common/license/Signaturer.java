@@ -1,11 +1,8 @@
 package org.hy.common.license;
 
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.Signature;
-import java.security.spec.PKCS8EncodedKeySpec;
-
-import it.sauronsoftware.base64.Base64;
+import org.hy.common.license.sign.ISignaturer;
+import org.hy.common.license.sign.Signaturer_V1;
+import org.hy.common.license.sign.Signaturer_V2;
 
 
 
@@ -23,28 +20,50 @@ import it.sauronsoftware.base64.Base64;
  * @author      ZhengWei(HY)
  * @createDate  2017-07-23
  * @version     v1.0
+ *              v2.0  添加：第二版本的签名方式:用友版本的。
  */
-public final class Signaturer
+public final class Signaturer implements ISignaturer
 {
     
-    /**
-     * 私钥进行签名
-     * 
-     * @author      ZhengWei(HY)
-     * @createDate  2017-07-23
-     * @version     v1.0
-     *
-     * @param i_KeyStore   公钥私钥对
-     * @param i_PlainText  明码文本
-     * @return
-     */
-    public final static byte [] sign(KeyStore i_KeyStore ,String i_PlainText)
+    private ISignaturer signaturer;
+    
+    
+    
+    public Signaturer(String i_PrivateKey)
     {
-        return sign(i_KeyStore.getPrivateKey() ,i_PlainText);
+        this(1 ,i_PrivateKey.getBytes());
+    }
+
+    
+    
+    public Signaturer(byte [] i_PrivateKey)
+    {
+        this(1 ,i_PrivateKey);
     }
     
     
-
+    
+    public Signaturer(int i_Version ,String i_PrivateKey)
+    {
+        this(i_Version ,i_PrivateKey.getBytes());
+    }
+    
+    
+    
+    public Signaturer(int i_Version ,byte [] i_PrivateKey)
+    {
+        if ( i_Version <= 1 )
+        {
+            this.signaturer = new Signaturer_V1(i_PrivateKey);
+        }
+        else if ( i_Version == 2 )
+        {
+            this.signaturer = new Signaturer_V2(i_PrivateKey);
+        }
+    }
+    
+    
+    
     /**
      * 私钥进行签名
      * 
@@ -52,37 +71,12 @@ public final class Signaturer
      * @createDate  2017-07-23
      * @version     v1.0
      *
-     * @param i_PrivateKey  私钥
      * @param i_PlainText   明码文本
      * @return
      */
-    public final static byte [] sign(byte [] i_PrivateKey ,String i_PlainText)
+    public final String sign(String i_PlainText)
     {
-        try
-        {
-            PKCS8EncodedKeySpec v_PKCS8Encode = new PKCS8EncodedKeySpec(Base64.decode(i_PrivateKey));
-            KeyFactory          v_KeyFactory  = KeyFactory.getInstance("RSA");
-            PrivateKey          v_PrivateKey  = v_KeyFactory.generatePrivate(v_PKCS8Encode);
-            Signature           v_Signature   = Signature.getInstance("MD5withRSA");      // 用私钥对信息生成数字签名
-            
-            v_Signature.initSign(v_PrivateKey);
-            v_Signature.update(i_PlainText.getBytes());
-            
-            return Base64.encode(v_Signature.sign());
-        }
-        catch (java.lang.Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return null;
-    }
-    
-    
-    
-    private Signaturer()
-    {
-        // 私有构造器
+        return this.signaturer.sign(i_PlainText);
     }
     
 }

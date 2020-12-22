@@ -26,7 +26,7 @@ import sun.misc.BASE64Encoder;
  * @createDate  2020-04-26
  * @version     v1.0
  */
-public class AES_V1 implements IAES
+public final class AES_V1 implements IAES
 {
 
     private SecretKey key;
