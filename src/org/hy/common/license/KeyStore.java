@@ -4,7 +4,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
 
-import it.sauronsoftware.base64.Base64;
+import java.util.Base64;
 
 
 
@@ -22,6 +22,7 @@ import it.sauronsoftware.base64.Base64;
  * @author      ZhengWei(HY)
  * @createDate  2017-07-23
  * @version     v1.0
+ *              v2.0  优化：使用JDK1.8内置的Base64，不再使用第三方的it.sauronsoftware.base64.Base64。
  */
 public final class KeyStore
 {
@@ -72,8 +73,8 @@ public final class KeyStore
             KeyPair v_Keys = v_Keygen.genKeyPair();
             
             v_Key            = new KeyStore();
-            v_Key.publicKey  = Base64.encode(v_Keys.getPublic().getEncoded());
-            v_Key.privateKey = Base64.encode(v_Keys.getPrivate().getEncoded());
+            v_Key.publicKey  = Base64.getEncoder().encode(v_Keys.getPublic().getEncoded());
+            v_Key.privateKey = Base64.getEncoder().encode(v_Keys.getPrivate().getEncoded());
         }
         catch (java.lang.Exception e)
         {

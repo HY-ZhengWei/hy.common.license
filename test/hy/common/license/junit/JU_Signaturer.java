@@ -9,6 +9,17 @@ import java.util.Map;
 import org.hy.common.license.Signaturer;
 import org.junit.Test;
 
+
+
+
+
+/**
+ * 用友签名测试
+ *
+ * @author      ZhengWei(HY)
+ * @createDate  2020-12-28
+ * @version     v1.0
+ */
 public class JU_Signaturer
 {
     

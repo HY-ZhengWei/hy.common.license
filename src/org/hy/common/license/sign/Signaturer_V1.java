@@ -5,7 +5,7 @@ import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 
-import it.sauronsoftware.base64.Base64;
+import java.util.Base64;
 
 
 
@@ -23,6 +23,7 @@ import it.sauronsoftware.base64.Base64;
  * @author      ZhengWei(HY)
  * @createDate  2017-07-23
  * @version     v1.0
+ *              v2.0  优化：使用JDK1.8内置的Base64，不再使用第三方的it.sauronsoftware.base64.Base64。
  */
 public final class Signaturer_V1 implements ISignaturer
 {
@@ -42,7 +43,7 @@ public final class Signaturer_V1 implements ISignaturer
     {
         try
         {
-            PKCS8EncodedKeySpec v_PKCS8Encode = new PKCS8EncodedKeySpec(Base64.decode(i_PrivateKey));
+            PKCS8EncodedKeySpec v_PKCS8Encode = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(i_PrivateKey));
             KeyFactory          v_KeyFactory  = KeyFactory.getInstance("RSA");
             
             this.privateKey = v_KeyFactory.generatePrivate(v_PKCS8Encode);
@@ -75,7 +76,7 @@ public final class Signaturer_V1 implements ISignaturer
             v_Signature.initSign(this.privateKey);
             v_Signature.update(i_PlainText.getBytes());
             
-            return new String(Base64.encode(v_Signature.sign()));
+            return new String(Base64.getEncoder().encode(v_Signature.sign()));
         }
         catch (Exception e)
         {

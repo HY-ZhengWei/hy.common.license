@@ -5,7 +5,7 @@ import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 
-import it.sauronsoftware.base64.Base64;
+import java.util.Base64;
 
 
 
@@ -23,6 +23,7 @@ import it.sauronsoftware.base64.Base64;
  * @author      ZhengWei(HY)
  * @createDate  2017-07-23
  * @version     v1.0
+ *              v2.0  优化：使用JDK1.8内置的Base64，不再使用第三方的it.sauronsoftware.base64.Base64。
  */
 public final class SignProvider
 {
@@ -63,10 +64,10 @@ public final class SignProvider
         try
         {
             // 解密由base64编码的公钥,并构造X509EncodedKeySpec对象
-            X509EncodedKeySpec v_X509Encoded = new X509EncodedKeySpec(Base64.decode(i_PublicKey));
+            X509EncodedKeySpec v_X509Encoded = new X509EncodedKeySpec(Base64.getDecoder().decode(i_PublicKey));
             KeyFactory         v_KeyFactory  = KeyFactory.getInstance("RSA");
             PublicKey          v_PublicKey   = v_KeyFactory.generatePublic(v_X509Encoded); // 取公钥匙对象
-            byte []            v_Sign        = Base64.decode(i_Sign);                      // 解密由base64编码的数字签名
+            byte []            v_Sign        = Base64.getDecoder().decode(i_Sign);         // 解密由base64编码的数字签名
             Signature          v_Signature   = Signature.getInstance("MD5withRSA");
             
             v_Signature.initVerify(v_PublicKey);
