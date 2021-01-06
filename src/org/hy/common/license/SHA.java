@@ -14,7 +14,7 @@ import org.hy.common.license.sha.ISHA;
  * @createDate  2021-01-06
  * @version     v1.0
  */
-public class SHA implements ISHA
+public class SHA implements IHash
 {
     
     private ISHA sha;

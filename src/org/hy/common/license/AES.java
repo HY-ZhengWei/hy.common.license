@@ -28,6 +28,15 @@ public final class AES implements ISymmetric
     
 
     
+    /**
+     * 构造器
+     *
+     * @author      ZhengWei(HY)
+     * @createDate  2020-04-26
+     * @version     v1.0
+     *
+     * @param i_PrivateKey  密钥
+     */
     public AES(String i_PrivateKey)
     {
         this(1 ,i_PrivateKey);
@@ -35,6 +44,16 @@ public final class AES implements ISymmetric
     
     
     
+    /**
+     * 构造器
+     *
+     * @author      ZhengWei(HY)
+     * @createDate  2020-09-16
+     * @version     v1.0
+     *
+     * @param i_Version     算法版本
+     * @param i_PrivateKey  密钥
+     */
     public AES(int i_Version ,String i_PrivateKey)
     {
         if ( i_Version <= 1 )

@@ -23,7 +23,7 @@ public final class Symmetric implements ISymmetric
     
     
     /**
-     * 构建对称加密（默认为：AES算法）
+     * 构造对称加密（默认为：AES算法）
      *
      * @author      ZhengWei(HY)
      * @createDate  2021-01-06
@@ -39,7 +39,7 @@ public final class Symmetric implements ISymmetric
     
     
     /**
-     * 构建对称加密
+     * 构造对称加密
      *
      * @author      ZhengWei(HY)
      * @createDate  2021-01-06

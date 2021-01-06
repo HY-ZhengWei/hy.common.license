@@ -12,7 +12,7 @@ import org.junit.Test;
 
 
 /**
- * 测试单：AES加密
+ * 测试单元：AES加密
  *
  * @author      ZhengWei(HY)
  * @createDate  2020-04-26
