@@ -15,10 +15,10 @@ public class JU_VBBase64
     @Test
     public void test_Decrypt()
     {
-        String v_Password = "MTQyLDIxOSwyNDYsMjExLDIsMTcyLDg3LDEwNCwzNSwxNjQsMzksMTk4LDE5LDE4MSwzLDIyNiwyNDQsMTQ1LDEzLDEzMiwxMjksMjE5LDYzLDEzMQ==";
-        String v_Key      = "795597";
+        String   v_Password = "MTQyLDIxOSwyNDYsMjExLDIsMTcyLDg3LDEwNCwzNSwxNjQsMzksMTk4LDE5LDE4MSwzLDIyNiwyNDQsMTQ1LDEzLDEzMiwxMjksMjE5LDYzLDEzMQ==";
+        VBBase64 v_VBBase64 = new VBBase64("795597");
 
-        System.out.println(VBBase64.decrypt(v_Password ,v_Key));
+        System.out.println(v_VBBase64.decrypt(v_Password));
         
         
         
@@ -46,12 +46,12 @@ public class JU_VBBase64
     @Test
     public void test_Encrypt() throws UnsupportedEncodingException
     {
-        String v_Text = "AM27421-2101-5428";
-        String v_Key  = "795597";
-        String v_Pwd  = VBBase64.encrypt(v_Text ,v_Key);
+        String   v_Text = "AM27421-2101-5428";
+        VBBase64 v_VBBase64 = new VBBase64("795597");
+        String   v_Pwd  = v_VBBase64.encrypt(v_Text);
         
         System.out.println(v_Pwd);
-        System.out.println(VBBase64.decrypt(v_Pwd ,v_Key));
+        System.out.println(v_VBBase64.decrypt(v_Pwd));
     }
     
 }

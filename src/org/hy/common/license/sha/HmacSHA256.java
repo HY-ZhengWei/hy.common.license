@@ -1,4 +1,4 @@
-package org.hy.common.license.sign;
+package org.hy.common.license.sha;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -11,33 +11,27 @@ import javax.crypto.spec.SecretKeySpec;
 
 
 /**
- * 用私钥进行签名（用友的签名）
- * 
- * 既然是加密，那肯定是不希望别人知道我的消息，所以只有我才能解密，所以可得出：
- *    公钥负责加密，私钥负责解密；
- *    
- * 同理，既然是签名，那肯定是不希望有人冒充我发消息，只有我才能发布这个签名，所以可得出：
- *    私钥负责签名，公钥负责验证
+ * Hash算法（摘要算法）：HmacSHA256加密。
  *
  * @author      ZhengWei(HY)
- * @createDate  2017-07-23
+ * @createDate  2021-01-06
  * @version     v1.0
  */
-public final class Signaturer_V2 implements ISignaturer
+public final class HmacSHA256 implements ISHA
 {
     
     private final byte [] privateKey;
     
     
     
-    public Signaturer_V2(String i_PrivateKey)
+    public HmacSHA256(String i_PrivateKey)
     {
        this(i_PrivateKey.getBytes(StandardCharsets.UTF_8));
     }
     
     
     
-    public Signaturer_V2(byte [] i_PrivateKey)
+    public HmacSHA256(byte [] i_PrivateKey)
     {
         this.privateKey = i_PrivateKey;
     }
@@ -45,7 +39,7 @@ public final class Signaturer_V2 implements ISignaturer
     
     
     /**
-     * 私钥进行签名
+     * 加密
      * 
      * @author      ZhengWei(HY)
      * @createDate  2020-12-21
@@ -54,7 +48,7 @@ public final class Signaturer_V2 implements ISignaturer
      * @param i_PlainText   明码文本
      * @return
      */
-    public final String sign(String i_PlainText)
+    public final String encrypt(String i_PlainText)
     {
         try
         {

@@ -4,7 +4,6 @@ import java.nio.charset.StandardCharsets;
 
 import org.hy.common.license.sign.ISignaturer;
 import org.hy.common.license.sign.Signaturer_V1;
-import org.hy.common.license.sign.Signaturer_V2;
 
 
 
@@ -22,7 +21,6 @@ import org.hy.common.license.sign.Signaturer_V2;
  * @author      ZhengWei(HY)
  * @createDate  2017-07-23
  * @version     v1.0
- *              v2.0  添加：第二版本的签名方式:用友版本的。
  */
 public final class Signaturer implements ISignaturer
 {
@@ -57,10 +55,6 @@ public final class Signaturer implements ISignaturer
         if ( i_Version <= 1 )
         {
             this.signaturer = new Signaturer_V1(i_PrivateKey);
-        }
-        else if ( i_Version == 2 )
-        {
-            this.signaturer = new Signaturer_V2(i_PrivateKey);
         }
     }
     

@@ -17,8 +17,10 @@ import org.hy.common.Help;
  *              v2.0  2020-05-16  添加：加密算法
  *              v2.1  2020-05-17  修正：解密方法，在将内存扩大8倍时，未浮点计算的问题。
  *              v2.2  2020-06-16  修正：解决加解文本有中文的问题。对无符号、有符号byte、int相互转换。
+ *              v3.0  2021-01-06  添加：实现 ISymmetric 统一对称算法接口。
+ *                                优化：加密、解密算法的性能提高
  */
-public class VBBase64
+public class VBBase64 implements ISymmetric
 {
     
     private static final byte [] $IP = { 57 ,49 ,41 ,33 ,25 ,17 ,9  ,1  ,59 ,51
@@ -183,6 +185,8 @@ public class VBBase64
     /**
      * 加密
      * 
+     * 建议：使用性能更高、算法更快的 (new VBBase64(i_Key)).encrypt(i_Text);
+     * 
      * @author      ZhengWei(HY)
      * @createDate  2020-05-16
      * @version     v1.0
@@ -191,79 +195,52 @@ public class VBBase64
      * @param i_Key    密钥
      * @return
      */
+    @Deprecated
     public static String encrypt(String i_Text ,String i_Key)
     {
-        if ( Help.isNull(i_Text) )
+        if ( Help.isNull(i_Text) || Help.isNull(i_Key) )
         {
             return "";
         }
         
-        byte   [] v_KeyBytes     = StrConv.vbFromUnicode(i_Key);
-        int    [] v_KeyArr       = null;
-        byte   [] v_BinKey       = new byte[64];                                         // 64位二进行制原始密钥
-        byte   [] v_KeyPC_1      = new byte[56];
-        byte   [] v_C0           = new byte[28];
-        byte   [] v_Cx           = new byte[28];
-        byte   [] v_Cy           = new byte[28];
-        byte   [] v_D0           = new byte[28];
-        byte   [] v_Dx           = new byte[28];
-        byte   [] v_Dy           = new byte[28];
-        byte [][] v_K            = new byte[16][48];
-        byte   [] v_TextBytes    = StrConv.vbFromUnicode(i_Text);
-        int    [] v_Text         = null;
-        int    [] v_TextCode     = new int[(int)(Math.ceil(v_TextBytes.length / 8D) * 8)];    // 扩大为8的倍数
-        int    [] v_TempCode     = new int[8];
-        byte   [] v_BinCode      = new byte[64];                                         // 存放64位的明文
-        byte   [] v_CodeIP       = new byte[64];                                         // 存放IP置换结果
-        byte   [] v_CodeE        = new byte[48];                                         // E膨胀结果
-        byte   [] v_CodeP        = new byte[32];                                         // P变换结果
-        byte [][] v_CodeS        = new byte[8][6];
-        byte   [] v_S            = new byte[8];                                          // S盒运算8个结果
-        byte   [] v_RetS         = new byte[48];                                         // S盒运算32位结果
-        byte   [] v_R0           = new byte[32];
-        byte   [] v_Rx           = new byte[32];
-        byte   [] v_Ry           = new byte[32];
-        byte   [] v_L0           = new byte[32];
-        byte   [] v_Lx           = new byte[32];
-        byte   [] v_Ly           = new byte[32];
-        int    [] v_RetTemp      = new int[8];                                           // 存放8位密文
-        int    [] v_Ret          = new int[v_TextCode.length];
-        
-        // 因Java中的byte是带符号，与VB的不一样，所以用int类型保存密码的byte[]数组
-        v_KeyArr = byteToIntArray(v_KeyBytes);
-        
-        for (int i=0; i<8 && i <v_KeyArr.length; i++)
-        {
-            for (int x=0; x<=7; x++)
-            {
-                v_BinKey[i * 8 + x] = (byte)Math.floor((v_KeyArr[i] & $BinKeyCalc[x]) / $BinKeyCalc[x]);
-            }
-        }
-        
-        // PC_1转换
-        for (int i=0; i<56; i++)
-        {
-            v_KeyPC_1[i] = v_BinKey[$PC_1[i]];
-        }
-        
-        // 生成C0、D0
-        for (int i=0; i<28; i++)
-        {
-            v_C0[i] = v_KeyPC_1[i];
-            v_D0[i] = v_KeyPC_1[i + 28];
-        }
-        
-        // 生成K
-        v_Cx = Arrays.copyOf(v_C0 ,v_C0.length);
-        v_Dx = Arrays.copyOf(v_D0 ,v_D0.length);
-        for (int i=0; i<16; i++)
-        {
-            makeCD(v_Cx ,v_Dx ,v_Cy ,v_Dy ,i + 1);
-            makeK(v_Cy ,v_Dy ,v_K[i]);
-            
-            v_Cx = Arrays.copyOf(v_Cy ,v_Cy.length);
-            v_Dx = Arrays.copyOf(v_Dy ,v_Dy.length);
-        }
+        return encrypt(i_Text ,makeKey(i_Key));
+    }
+    
+    
+    
+    /**
+     * 加密
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2020-05-16
+     * @version     v1.0
+     *
+     * @param i_Text   明文
+     * @param i_Key    密钥
+     * @return
+     */
+    private static String encrypt(String i_Text ,byte [][] i_Key)
+    {
+        byte [][] v_K         = i_Key;
+        byte   [] v_TextBytes = StrConv.vbFromUnicode(i_Text);
+        int    [] v_Text      = null;
+        int    [] v_TextCode  = new int[(int)(Math.ceil(v_TextBytes.length / 8D) * 8)];    // 扩大为8的倍数
+        int    [] v_TempCode  = new int[8];
+        byte   [] v_BinCode   = new byte[64];                                         // 存放64位的明文
+        byte   [] v_CodeIP    = new byte[64];                                         // 存放IP置换结果
+        byte   [] v_CodeE     = new byte[48];                                         // E膨胀结果
+        byte   [] v_CodeP     = new byte[32];                                         // P变换结果
+        byte [][] v_CodeS     = new byte[8][6];
+        byte   [] v_S         = new byte[8];                                          // S盒运算8个结果
+        byte   [] v_RetS      = new byte[48];                                         // S盒运算32位结果
+        byte   [] v_R0        = new byte[32];
+        byte   [] v_Rx        = new byte[32];
+        byte   [] v_Ry        = new byte[32];
+        byte   [] v_L0        = new byte[32];
+        byte   [] v_Lx        = new byte[32];
+        byte   [] v_Ly        = new byte[32];
+        int    [] v_RetTemp   = new int[8];                                           // 存放8位密文
+        int    [] v_Ret       = new int[v_TextCode.length];
         
         // 因Java中的byte是带符号，与VB的不一样，所以用int类型保存密码的byte[]数组
         v_Text = byteToIntArray(v_TextBytes);
@@ -383,6 +360,8 @@ public class VBBase64
     /**
      * 解密
      * 
+     * 建议：使用性能更高、算法更快的 (new VBBase64(i_Key)).decrypt(i_Password);
+     * 
      * @author      ZhengWei(HY)
      * @createDate  2019-05-21
      * @version     v1.0
@@ -391,9 +370,15 @@ public class VBBase64
      * @param i_Key       密钥
      * @return
      */
+    @Deprecated
     public static String decrypt(String i_Password ,String i_Key)
     {
-        return decode(i_Password ,i_Key);
+        if ( Help.isNull(i_Password) || Help.isNull(i_Key) )
+        {
+            return "";
+        }
+        
+        return decrypt(i_Password ,makeKey(i_Key));
     }
     
     
@@ -409,41 +394,27 @@ public class VBBase64
      * @param i_Key       密钥
      * @return
      */
-    public static String decode(String i_Password ,String i_Key)
+    private static String decrypt(String i_Password ,byte [][] i_Key)
     {
-        if ( Help.isNull(i_Password) || Help.isNull(i_Key) )
-        {
-            return "";
-        }
-        
-        String [] v_PwdArr       = StrConv.sFromBase64(i_Password).split(",");
-        byte   [] v_KeyBytes     = StrConv.vbFromUnicode(i_Key);
-        int    [] v_PwdCode      = new int[(int)(Math.ceil(v_PwdArr.length / 8D) * 8)];  // 扩大为8的倍数
-        int    [] v_TempCode     = new int[8];
-        byte   [] v_BinCode      = new byte[64];                                         // 存放64位的明文
-        byte   [] v_CodeIP       = new byte[64];                                         // 存放IP置换结果
-        byte   [] v_CodeE        = new byte[48];                                         // E膨胀结果
-        byte   [] v_CodeP        = new byte[32];                                         // P变换结果
-        byte [][] v_CodeS        = new byte[8][6];
-        byte   [] v_S            = new byte[8];                                          // S盒运算8个结果
-        byte   [] v_RetS         = new byte[48];                                         // S盒运算32位结果
-        byte   [] v_BinKey       = new byte[64];                                         // 64位二进行制原始密钥
-        byte   [] v_KeyPC_1      = new byte[56];
-        byte   [] v_C0           = new byte[28];
-        byte   [] v_Cx           = new byte[28];
-        byte   [] v_Cy           = new byte[28];
-        byte   [] v_D0           = new byte[28];
-        byte   [] v_Dx           = new byte[28];
-        byte   [] v_Dy           = new byte[28];
-        byte [][] v_K            = new byte[16][48];
-        byte   [] v_R0           = new byte[32];
-        byte   [] v_Rx           = new byte[32];
-        byte   [] v_Ry           = new byte[32];
-        byte   [] v_L0           = new byte[32];
-        byte   [] v_Lx           = new byte[32];
-        byte   [] v_Ly           = new byte[32];
-        int    [] v_RetTemp      = new int[8];                                           // 存放8位密文
-        int    [] v_Ret          = new int[v_PwdCode.length];
+        String [] v_PwdArr   = StrConv.sFromBase64(i_Password).split(",");
+        int    [] v_PwdCode  = new int[(int)(Math.ceil(v_PwdArr.length / 8D) * 8)];  // 扩大为8的倍数
+        int    [] v_TempCode = new int[8];
+        byte   [] v_BinCode  = new byte[64];                                         // 存放64位的明文
+        byte   [] v_CodeIP   = new byte[64];                                         // 存放IP置换结果
+        byte   [] v_CodeE    = new byte[48];                                         // E膨胀结果
+        byte   [] v_CodeP    = new byte[32];                                         // P变换结果
+        byte [][] v_CodeS    = new byte[8][6];
+        byte   [] v_S        = new byte[8];                                          // S盒运算8个结果
+        byte   [] v_RetS     = new byte[48];                                         // S盒运算32位结果
+        byte [][] v_K        = i_Key;
+        byte   [] v_R0       = new byte[32];
+        byte   [] v_Rx       = new byte[32];
+        byte   [] v_Ry       = new byte[32];
+        byte   [] v_L0       = new byte[32];
+        byte   [] v_Lx       = new byte[32];
+        byte   [] v_Ly       = new byte[32];
+        int    [] v_RetTemp  = new int[8];                                           // 存放8位密文
+        int    [] v_Ret      = new int[v_PwdCode.length];
         
         
         // 因Java中的byte是带符号，与VB的不一样，所以用int类型保存密码的byte[]数组
@@ -451,41 +422,6 @@ public class VBBase64
         {
             v_PwdCode[i] = Integer.parseInt(v_PwdArr[i]);
         }
-        
-        for (int i=0; i<8 && i <v_KeyBytes.length; i++)
-        {
-            for (int x=0; x<=7; x++)
-            {
-                v_BinKey[i * 8 + x] = (byte)Math.floor((v_KeyBytes[i] & $BinKeyCalc[x]) / $BinKeyCalc[x]);
-            }
-        }
-        
-        // PC_1转换
-        for (int i=0; i<56; i++)
-        {
-            v_KeyPC_1[i] = v_BinKey[$PC_1[i]];
-        }
-        
-        // 生成C0、D0
-        for (int i=0; i<28; i++)
-        {
-            v_C0[i] = v_KeyPC_1[i];
-            v_D0[i] = v_KeyPC_1[i + 28];
-        }
-        
-        
-        // 生成K
-        v_Cx = Arrays.copyOf(v_C0 ,v_C0.length);
-        v_Dx = Arrays.copyOf(v_D0 ,v_D0.length);
-        for (int i=0; i<16; i++)
-        {
-            makeCD(v_Cx ,v_Dx ,v_Cy ,v_Dy ,i + 1);
-            makeK(v_Cy ,v_Dy ,v_K[i]);
-            
-            v_Cx = Arrays.copyOf(v_Cy ,v_Cy.length);
-            v_Dx = Arrays.copyOf(v_Dy ,v_Dy.length);
-        }
-        
         
         for (int j=0; j<v_PwdCode.length; j+=8)
         {
@@ -665,6 +601,128 @@ public class VBBase64
         {
             io_K[i] = v_C_D[$PC_2[i]];
         }
+    }
+    
+    
+    
+    /**
+     * 生成加密、解密密钥
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2021-01-06
+     * @version     v1.0
+     *
+     * @param i_Key
+     * @return
+     */
+    private static byte [][] makeKey(String i_Key)
+    {
+        byte   [] v_KeyBytes = StrConv.vbFromUnicode(i_Key);
+        int    [] v_KeyArr   = null;
+        byte   [] v_BinKey   = new byte[64];                 // 64位二进行制原始密钥
+        byte   [] v_KeyPC_1  = new byte[56];
+        byte   [] v_C0       = new byte[28];
+        byte   [] v_Cx       = new byte[28];
+        byte   [] v_Cy       = new byte[28];
+        byte   [] v_D0       = new byte[28];
+        byte   [] v_Dx       = new byte[28];
+        byte   [] v_Dy       = new byte[28];
+        byte [][] v_K        = new byte[16][48];
+        
+        
+        // 因Java中的byte是带符号，与VB的不一样，所以用int类型保存密码的byte[]数组
+        v_KeyArr = byteToIntArray(v_KeyBytes);
+        
+        for (int i=0; i<8 && i <v_KeyArr.length; i++)
+        {
+            for (int x=0; x<=7; x++)
+            {
+                v_BinKey[i * 8 + x] = (byte)Math.floor((v_KeyArr[i] & $BinKeyCalc[x]) / $BinKeyCalc[x]);
+            }
+        }
+        
+        // PC_1转换
+        for (int i=0; i<56; i++)
+        {
+            v_KeyPC_1[i] = v_BinKey[$PC_1[i]];
+        }
+        
+        // 生成C0、D0
+        for (int i=0; i<28; i++)
+        {
+            v_C0[i] = v_KeyPC_1[i];
+            v_D0[i] = v_KeyPC_1[i + 28];
+        }
+        
+        // 生成K
+        v_Cx = Arrays.copyOf(v_C0 ,v_C0.length);
+        v_Dx = Arrays.copyOf(v_D0 ,v_D0.length);
+        for (int i=0; i<16; i++)
+        {
+            makeCD(v_Cx ,v_Dx ,v_Cy ,v_Dy ,i + 1);
+            makeK(v_Cy ,v_Dy ,v_K[i]);
+            
+            v_Cx = Arrays.copyOf(v_Cy ,v_Cy.length);
+            v_Dx = Arrays.copyOf(v_Dy ,v_Dy.length);
+        }
+        
+        return v_K;
+    }
+    
+    
+    
+    /** 加密、解密密钥 */
+    private byte [][] key;
+    
+    
+    
+    public VBBase64(String i_PrivateKey)
+    {
+        this.key = makeKey(i_PrivateKey);
+    }
+    
+    
+    
+    /**
+     * 加密 
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2021-01-06
+     * @version     v1.0
+     *
+     * @param i_Content
+     * @return
+     */
+    public String encrypt(String i_Content)
+    {
+        if ( Help.isNull(i_Content) )
+        {
+            return "";
+        }
+        
+        return encrypt(i_Content ,this.key);
+    }
+
+
+
+    /**
+     * 解密
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2021-01-06
+     * @version     v1.0
+     *
+     * @param i_Content
+     * @return
+     */
+    public String decrypt(String i_Content) 
+    {
+        if ( Help.isNull(i_Content) )
+        {
+            return "";
+        }
+        
+        return decrypt(i_Content ,this.key);
     }
     
 }
