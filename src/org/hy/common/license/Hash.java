@@ -22,7 +22,7 @@ public final class Hash implements IHash
     
     
     /**
-     * 构造对称加密（默认为：MD5算法）
+     * 构造摘要加密（默认为：MD5算法）
      *
      * @author      ZhengWei(HY)
      * @createDate  2021-01-06
@@ -38,7 +38,7 @@ public final class Hash implements IHash
     
     
     /**
-     * 构造对称加密
+     * 构造摘要加密
      *
      * @author      ZhengWei(HY)
      * @createDate  2021-01-06
@@ -50,13 +50,32 @@ public final class Hash implements IHash
      */
     public Hash(int i_Type ,int i_Version ,String i_PrivateKey)
     {
+        this(i_Type ,i_Version ,i_PrivateKey ,true);
+    }
+    
+    
+    
+    /**
+     * 构造摘要加密
+     *
+     * @author      ZhengWei(HY)
+     * @createDate  2021-01-14
+     * @version     v1.0
+     *
+     * @param i_Type          算法类型
+     * @param i_Version       算法版本
+     * @param i_PrivateKey    密钥
+     * @param i_IsURLEnocode  是否转码
+     */
+    public Hash(int i_Type ,int i_Version ,String i_PrivateKey ,boolean i_IsURLEnocode)
+    {
         if ( i_Type <= 1 )
         {
             this.hash = new MD5(i_Version);
         }
         else if ( i_Type == 2 )
         {
-            this.hash = new SHA(i_Version ,i_PrivateKey);
+            this.hash = new SHA(i_Version ,i_PrivateKey ,i_IsURLEnocode);
         }
     }
     

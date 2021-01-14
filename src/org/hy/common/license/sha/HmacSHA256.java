@@ -22,24 +22,49 @@ public final class HmacSHA256 implements ISHA
     
     private final byte [] privateKey;
     
+    private final boolean isEncode;
     
     
-    public HmacSHA256(String i_PrivateKey)
+    
+    /**
+     * 构造摘要加密
+     *
+     * @author      ZhengWei(HY)
+     * @createDate  2021-01-16
+     * @version     v1.0
+     *
+     * @param i_PrivateKey    密钥
+     * @param i_IsURLEnocode  是否转码
+     */
+    public HmacSHA256(String i_PrivateKey ,boolean i_IsURLEnocode)
     {
-       this(i_PrivateKey.getBytes(StandardCharsets.UTF_8));
+       this(i_PrivateKey.getBytes(StandardCharsets.UTF_8) ,i_IsURLEnocode);
     }
     
     
     
-    public HmacSHA256(byte [] i_PrivateKey)
+    /**
+     * 构造摘要加密
+     *
+     * @author      ZhengWei(HY)
+     * @createDate  2021-01-16
+     * @version     v1.0
+     *
+     * @param i_PrivateKey    密钥
+     * @param i_IsURLEnocode  是否转码
+     */
+    public HmacSHA256(byte [] i_PrivateKey ,boolean i_IsURLEnocode)
     {
         this.privateKey = i_PrivateKey;
+        this.isEncode   = i_IsURLEnocode;
     }
     
     
     
     /**
      * 加密
+     * 
+     *   公式为：URLEncode(Base64.encode(HmacSHA256(文本))) 
      * 
      * @author      ZhengWei(HY)
      * @createDate  2020-12-21
@@ -57,9 +82,17 @@ public final class HmacSHA256 implements ISHA
             
             byte[] v_SignData         = v_Mac.doFinal(i_PlainText.getBytes(StandardCharsets.UTF_8));
             String v_SignDataToEnCode = Base64.getEncoder().encodeToString(v_SignData);
-            return URLEncoder.encode(v_SignDataToEnCode, "UTF-8");
+            
+            if ( isEncode )
+            {
+                return URLEncoder.encode(v_SignDataToEnCode, "UTF-8");
+            }
+            else
+            {
+                return v_SignDataToEnCode;
+            }
         }
-        catch (java.lang.Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
