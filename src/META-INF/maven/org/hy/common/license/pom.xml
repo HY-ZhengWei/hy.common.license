@@ -31,12 +31,5 @@
       <scope>test</scope>
     </dependency>
     
-	<!-- https://github.com/HY-ZhengWei/XJava -->
-	<dependency>
-	    <groupId>org</groupId>
-	    <artifactId>hy.common.xjava</artifactId>
-	    <version>4.1.0</version>
-	</dependency>
-	
   </dependencies>
 </project>
