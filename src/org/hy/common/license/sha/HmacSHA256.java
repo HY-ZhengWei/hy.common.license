@@ -81,7 +81,7 @@ public final class HmacSHA256 implements ISHA
             v_Mac.init(new SecretKeySpec(privateKey, "HmacSHA256"));
             
             byte[] v_SignData         = v_Mac.doFinal(i_PlainText.getBytes(StandardCharsets.UTF_8));
-            String v_SignDataToEnCode = Base64.getEncoder().encodeToString(v_SignData);
+            String v_SignDataToEnCode = new String(Base64.getEncoder().encode(v_SignData) ,"UTF-8");
             
             if ( isEncode )
             {

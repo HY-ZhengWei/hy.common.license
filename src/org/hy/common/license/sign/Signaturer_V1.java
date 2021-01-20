@@ -76,7 +76,7 @@ public final class Signaturer_V1 implements ISignaturer
             v_Signature.initSign(this.privateKey);
             v_Signature.update(i_PlainText.getBytes());
             
-            return new String(Base64.getEncoder().encode(v_Signature.sign()));
+            return new String(Base64.getEncoder().encode(v_Signature.sign()) ,"UTF-8");
         }
         catch (Exception e)
         {

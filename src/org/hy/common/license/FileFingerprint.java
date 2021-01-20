@@ -2,6 +2,8 @@ package org.hy.common.license;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Base64;
 
 import org.hy.common.Help;
 import org.hy.common.file.FileHelp;
@@ -112,7 +114,11 @@ public class FileFingerprint
             String v_Content = "";
             try
             {
-                v_Content = this.fileHelp.getContent(i_Folder);
+                byte [] v_ContentByte = this.fileHelp.getContentByte(i_Folder);
+                if ( !Help.isNull(v_ContentByte) )
+                {
+                    v_Content = new String(Base64.getEncoder().encode(v_ContentByte) ,"UTF-8");
+                }
             }
             catch (IOException e)
             {
@@ -144,7 +150,11 @@ public class FileFingerprint
             {
                 try
                 {
-                    v_Content = this.fileHelp.getContent(v_File);
+                    byte [] v_ContentByte = this.fileHelp.getContentByte(v_File);
+                    if ( !Help.isNull(v_ContentByte) )
+                    {
+                        v_Content = new String(Base64.getEncoder().encode(v_ContentByte) ,"UTF-8");
+                    }
                 }
                 catch (IOException e)
                 {
@@ -289,7 +299,11 @@ public class FileFingerprint
             String v_Content = "";
             try
             {
-                v_Content = this.fileHelp.getContent(i_Folder);
+                byte [] v_ContentByte = this.fileHelp.getContentByte(i_Folder);
+                if ( !Help.isNull(v_ContentByte) )
+                {
+                    v_Content = new String(Base64.getEncoder().encode(v_ContentByte) ,"UTF-8");
+                }
             }
             catch (IOException e)
             {
@@ -308,6 +322,7 @@ public class FileFingerprint
         }
         
         File [] v_Files = i_Folder.listFiles();
+        Arrays.sort(v_Files);
         if ( Help.isNull(v_Files) )
         {
             return "";
@@ -326,7 +341,11 @@ public class FileFingerprint
                 
                 try
                 {
-                    v_Content = this.fileHelp.getContent(v_File);
+                    byte [] v_ContentByte = this.fileHelp.getContentByte(v_File);
+                    if ( !Help.isNull(v_ContentByte) )
+                    {
+                        v_Content = new String(Base64.getEncoder().encode(v_ContentByte) ,"UTF-8");
+                    }
                 }
                 catch (IOException e)
                 {

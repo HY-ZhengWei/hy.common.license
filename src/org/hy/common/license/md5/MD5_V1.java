@@ -33,7 +33,7 @@ public class MD5_V1 implements IMD5
         {
             MessageDigest v_MD5 = MessageDigest.getInstance("MD5");
             
-            return Base64.getEncoder().encodeToString(v_MD5.digest(i_Content.getBytes("UTF-8")));
+            return new String(Base64.getEncoder().encode(v_MD5.digest(i_Content.getBytes("UTF-8"))) ,"UTF-8");
         }
         catch (Exception exce)
         {

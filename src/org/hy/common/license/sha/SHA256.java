@@ -67,7 +67,7 @@ public class SHA256 implements ISHA
             MessageDigest v_MessageDigest = MessageDigest.getInstance("SHA-256");
             v_MessageDigest.update(i_Content.getBytes("UTF-8"));
             
-            String v_Encode = Base64.getEncoder().encodeToString(v_MessageDigest.digest());
+            String v_Encode = new String(Base64.getEncoder().encode(v_MessageDigest.digest()) ,"UTF-8");
             
             if ( this.isEncode )
             {
