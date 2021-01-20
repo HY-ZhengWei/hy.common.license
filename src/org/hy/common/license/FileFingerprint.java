@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 import org.hy.common.Help;
 import org.hy.common.file.FileHelp;
@@ -136,12 +137,14 @@ public class FileFingerprint
             }
         }
         
-        File [] v_Files = i_Folder.listFiles();
-        if ( Help.isNull(v_Files) )
+        File [] v_FilesArr = i_Folder.listFiles();
+        if ( Help.isNull(v_FilesArr) )
         {
             return "";
         }
         
+        List<File> v_Files = Arrays.asList(v_FilesArr);
+        Help.toSort(v_Files ,"name");
         for (File v_File : v_Files)
         {
             String v_Content = "";
@@ -321,13 +324,14 @@ public class FileFingerprint
             }
         }
         
-        File [] v_Files = i_Folder.listFiles();
-        Arrays.sort(v_Files);
-        if ( Help.isNull(v_Files) )
+        File [] v_FilesArr = i_Folder.listFiles();
+        if ( Help.isNull(v_FilesArr) )
         {
             return "";
         }
         
+        List<File> v_Files = Arrays.asList(v_FilesArr);
+        Help.toSort(v_Files ,"name");
         for (File v_File : v_Files)
         {
             String v_Content = "";

@@ -47,7 +47,7 @@ public class JU_FileFingerprint
         
         
         v_BTime = Date.getNowTime().getTime();
-        System.out.println("目录的指纹：" + v_FFingerprint.calcFingerprint(new File("D:\\WorkSpace_SearchDesktop\\hy.common.xjava")));
+        System.out.println("目录的指纹：" + v_FFingerprint.calcFingerprint(new File("D:\\WorkSpace_SearchDesktop\\hy.common.license")));
         v_ETime = Date.getNowTime().getTime();
         System.out.println("用时：" + Date.toTimeLen(v_ETime - v_BTime));
     }
