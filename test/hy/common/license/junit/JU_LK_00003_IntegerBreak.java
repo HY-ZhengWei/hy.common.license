@@ -7,6 +7,26 @@ import org.hy.common.Date;
 import org.hy.common.StringHelp;
 import org.junit.Test;
 
+
+
+
+
+/**
+ * 拆分数，所有加的和等于被拆分数的可能性
+ * 
+ * 如5可被拆分以下可能：
+ * 
+ * 5 = 1 + 4
+ * 5 = 1 + 1 + 3
+ * 5 = 1 + 1 + 1 + 2
+ * 5 = 1 + 1 + 1 + 1 + 1
+ * 5 = 1 + 2 + 2
+ * 5 = 2 + 3
+ *
+ * @author      ZhengWei(HY)
+ * @createDate  2021-01-26
+ * @version     v1.0
+ */
 public class JU_LK_00003_IntegerBreak
 {
     
@@ -16,7 +36,7 @@ public class JU_LK_00003_IntegerBreak
     @Test
     public void LK()
     {
-        int v_Num = 81;
+        int v_Num = 5;
         List<List<Integer>> v_Ret = new ArrayList<List<Integer>>();
         
         
@@ -50,10 +70,15 @@ public class JU_LK_00003_IntegerBreak
             v_Buffer.append(StringHelp.rpad(++v_Count ,16 ," "));
             
             v_Buffer.append(i_Num).append(" = ").append(v_Data.get(0));
+            
+            int v_Sum = v_Data.get(0);
             for (int x=1; x<v_Data.size(); x++)
             {
                 v_Buffer.append(" + ").append(v_Data.get(x));
+                v_Sum *= v_Data.get(x);
             }
+            
+            v_Buffer.append(" 积").append(v_Sum);
             
             System.out.println(v_Buffer.toString());
         }
