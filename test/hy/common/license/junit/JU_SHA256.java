@@ -29,4 +29,14 @@ public class JU_SHA256
         System.out.println(v_Hash_SHA512_2.encrypt("Hello World!"));
     }
     
+    
+    
+    @Test
+    public void test_SMS()
+    {
+        Hash v_Hash_SHA256_1 = new Hash(2 ,2 ,null ,false);
+        
+        System.out.println(v_Hash_SHA256_1.encrypt("AccountId=yanfa001&PhoneNos=13699999999&Password=B54B89712EB997BE99114478E3673E3F&Random=6203922&Timestamp=1532928860"));
+    }
+    
 }

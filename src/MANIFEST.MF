@@ -1,5 +1,5 @@
-Manifest-Version: 1.1.0
+Manifest-Version: 1.1.1
 Created-By: HY.ZhengWei@qq.com  2017
-Specification-Version: 1.1.0  2021-01-20
+Specification-Version: 1.1.1  2021-02-06
 SourceCode: https://github.com/HY-ZhengWei/hy.common.license
 Build-JDK: 1.8

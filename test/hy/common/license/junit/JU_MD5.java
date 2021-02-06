@@ -1,5 +1,6 @@
 package hy.common.license.junit;
 
+import org.hy.common.license.Hash;
 import org.hy.common.license.md5.MD5_V1;
 import org.hy.common.license.md5.MD5_V2;
 import org.hy.common.license.md5.MD5_V3;
@@ -56,6 +57,14 @@ public class JU_MD5
         MD5_V4 v_MD5 = new MD5_V4();
         
         System.out.println("MD5_V4 = " + v_MD5.encrypt("Hello World！"));
+    }
+    
+    
+    
+    @Test
+    public void test_SMS()
+    {
+        System.out.println("MD5_SMS = " + (new Hash(1 ,4 ,null)).encrypt("yanfa001SMmsEncryptKey"));
     }
     
 }

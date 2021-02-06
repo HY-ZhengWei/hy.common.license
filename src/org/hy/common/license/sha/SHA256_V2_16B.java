@@ -1,15 +1,15 @@
 package org.hy.common.license.sha;
 
-import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.util.Base64;
+
+import org.hy.common.StringHelp;
 
 
 
 
 
 /**
- * Hash算法（摘要算法）
+ * Hash算法（摘要算法）：按16进制输出结果
  * 
  * 1993年，美国国家安全局发布了SHA算法，全称是Secure Hash Algorithm。
  * 比特币采用SHA-256算法，即生成的数字指纹固定长度是256位。
@@ -21,15 +21,11 @@ import java.util.Base64;
  *    2. 只要原文改了任何一个字，生成的数字指纹就会发生巨大的变化。也就是说，完全没有任何规律，无法通过数字指纹反推原文。
  *
  * @author      ZhengWei(HY)
- * @createDate  2021-01-14
+ * @createDate  2021-02-06
  * @version     v1.0
  */
-public class SHA256 implements ISHA
+public class SHA256_V2_16B implements ISHA
 {
-    
-    private final boolean isEncode;
-    
-    
     
     /**
      * 构造摘要加密
@@ -38,12 +34,10 @@ public class SHA256 implements ISHA
      * @createDate  2021-01-16
      * @version     v1.0
      *
-     * @param i_PrivateKey    密钥
      * @param i_IsURLEnocode  是否转码
      */
-    public SHA256(boolean i_IsURLEnocode)
+    public SHA256_V2_16B()
     {
-        this.isEncode = i_IsURLEnocode;
     }
     
     
@@ -65,18 +59,9 @@ public class SHA256 implements ISHA
         try
         {
             MessageDigest v_MessageDigest = MessageDigest.getInstance("SHA-256");
-            v_MessageDigest.update(i_Content.getBytes("UTF-8"));
+            byte[]        v_ByteData      = v_MessageDigest.digest(i_Content.getBytes("UTF-8"));
             
-            String v_Encode = new String(Base64.getEncoder().encode(v_MessageDigest.digest()) ,"UTF-8");
-            
-            if ( this.isEncode )
-            {
-                return URLEncoder.encode(v_Encode, "UTF-8");
-            }
-            else
-            {
-                return v_Encode;
-            }
+            return StringHelp.bytesToHex(v_ByteData);
         }
         catch (Exception e)
         {

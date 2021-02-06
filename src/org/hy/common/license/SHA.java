@@ -2,7 +2,8 @@ package org.hy.common.license;
 
 import org.hy.common.license.sha.HmacSHA256;
 import org.hy.common.license.sha.ISHA;
-import org.hy.common.license.sha.SHA256;
+import org.hy.common.license.sha.SHA256_V1_64B;
+import org.hy.common.license.sha.SHA256_V2_16B;
 import org.hy.common.license.sha.SHA512;
 
 
@@ -15,6 +16,7 @@ import org.hy.common.license.sha.SHA512;
  * @author      ZhengWei(HY)
  * @createDate  2021-01-06
  * @version     v1.0
+ *              v2.0  2021-02-06  添加：SHA-256的16进制加密算法
  */
 public class SHA implements IHash
 {
@@ -75,9 +77,13 @@ public class SHA implements IHash
         }
         else if ( i_Version == 2 )
         {
-            this.sha = new SHA256(i_IsURLEnocode);
+            this.sha = new SHA256_V1_64B(i_IsURLEnocode);
         }
         else if ( i_Version == 3 )
+        {
+            this.sha = new SHA256_V2_16B();
+        }
+        else if ( i_Version == 5 )
         {
             this.sha = new SHA512(i_IsURLEnocode);
         }
