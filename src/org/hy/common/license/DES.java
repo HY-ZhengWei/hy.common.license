@@ -1,15 +1,12 @@
 package org.hy.common.license;
 
-
 import java.security.Key;
 import java.security.SecureRandom;
- 
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
- 
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.hy.common.license.base64.Base64Factory;
 
 
 
@@ -68,10 +65,10 @@ public class DES implements ISymmetric
      * @param str
      * @return
      */
+    @Override
     public String encrypt(String str)
     {
         //基于BASE64编码，接收byte[]并转换成String
-        BASE64Encoder base64Encoder=new BASE64Encoder();
         try {
             // 按UTF8编码
             byte[] bytes = str.getBytes($CHARSETNAME);
@@ -82,7 +79,7 @@ public class DES implements ISymmetric
             // 加密
             byte[] doFinal = cipher.doFinal(bytes);
             // byte[]to encode好的String并返回
-            return base64Encoder.encode(doFinal);
+            return new String(Base64Factory.getIntance().encode(doFinal) ,"UTF-8");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -96,13 +93,13 @@ public class DES implements ISymmetric
      * @param str
      * @return
      */
-    public String decrypt(String str) 
+    @Override
+    public String decrypt(String str)
     {
         // 基于BASE64编码，接收byte[]并转换成String
-        BASE64Decoder base64decoder = new BASE64Decoder();
         try {
             // 将字符串decode成byte[]
-            byte[] bytes = base64decoder.decodeBuffer(str);
+            byte[] bytes = Base64Factory.getIntance().decode(str);
             // 获取解密对象
             Cipher cipher = Cipher.getInstance($ALGORITHM);
             // 初始化解密信息

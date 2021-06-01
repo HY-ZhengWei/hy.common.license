@@ -5,9 +5,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.hy.common.StringHelp;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.hy.common.license.base64.Base64Factory;
 
 
 
@@ -59,7 +57,7 @@ public final class AES_V2 implements IAES
     
     
     /**
-     * 加密 
+     * 加密
      * 
      * @author      ZhengWei(HY)
      * @createDate  2020-09-16
@@ -68,13 +66,14 @@ public final class AES_V2 implements IAES
      * @param i_Content
      * @return
      */
+    @Override
     public String encrypt(String i_Content)
     {
         try
         {
             byte [] v_Byte_AES = this.cipherEncrypt.doFinal(i_Content.getBytes($CharsetName));
             
-            return new String(new BASE64Encoder().encode(v_Byte_AES));
+            return new String(Base64Factory.getIntance().encode(v_Byte_AES) ,"UTF-8");
         }
         catch (Exception e)
         {
@@ -96,11 +95,12 @@ public final class AES_V2 implements IAES
      * @param i_Content
      * @return
      */
+    @Override
     public String decrypt(String i_Content)
     {
         try
         {
-            byte [] v_ByteContent = new BASE64Decoder().decodeBuffer(i_Content);
+            byte [] v_ByteContent = Base64Factory.getIntance().decode(i_Content);
             byte [] v_ByteDecode  = this.cipherDecrypt.doFinal(v_ByteContent);
             
             return new String(v_ByteDecode, $CharsetName);

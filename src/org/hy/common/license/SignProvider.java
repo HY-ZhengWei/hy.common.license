@@ -5,7 +5,7 @@ import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 
-import java.util.Base64;
+import org.hy.common.license.base64.Base64Factory;
 
 
 
@@ -16,7 +16,7 @@ import java.util.Base64;
  * 
  * 既然是加密，那肯定是不希望别人知道我的消息，所以只有我才能解密，所以可得出：
  *    公钥负责加密，私钥负责解密；
- *    
+ * 
  * 同理，既然是签名，那肯定是不希望有人冒充我发消息，只有我才能发布这个签名，所以可得出：
  *    私钥负责签名，公钥负责验证
  *
@@ -64,10 +64,10 @@ public final class SignProvider
         try
         {
             // 解密由base64编码的公钥,并构造X509EncodedKeySpec对象
-            X509EncodedKeySpec v_X509Encoded = new X509EncodedKeySpec(Base64.getDecoder().decode(i_PublicKey));
+            X509EncodedKeySpec v_X509Encoded = new X509EncodedKeySpec(Base64Factory.getIntance().decode(i_PublicKey));
             KeyFactory         v_KeyFactory  = KeyFactory.getInstance("RSA");
             PublicKey          v_PublicKey   = v_KeyFactory.generatePublic(v_X509Encoded); // 取公钥匙对象
-            byte []            v_Sign        = Base64.getDecoder().decode(i_Sign);         // 解密由base64编码的数字签名
+            byte []            v_Sign        = Base64Factory.getIntance().decode(i_Sign);  // 解密由base64编码的数字签名
             Signature          v_Signature   = Signature.getInstance("MD5withRSA");
             
             v_Signature.initVerify(v_PublicKey);

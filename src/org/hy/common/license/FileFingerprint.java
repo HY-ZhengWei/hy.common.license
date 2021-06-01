@@ -3,11 +3,11 @@ package org.hy.common.license;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 import org.hy.common.Help;
 import org.hy.common.file.FileHelp;
+import org.hy.common.license.base64.Base64Factory;
 import org.hy.common.xml.log.Logger;
 
 
@@ -63,7 +63,7 @@ public class FileFingerprint
      * @version     v1.0
      *
      * @param i_Folder  父目录或文件
-     * @return          返回文件指纹。 
+     * @return          返回文件指纹。
      *                     1. 当目录下无任何文件时，指纹为空字符串。
      *                     2. 当文件内容为空时，指纹为空字符串。
      */
@@ -87,7 +87,7 @@ public class FileFingerprint
      *
      * @param i_Folder  父目录或文件
      * @param i_Level   目录层级。有效下标从0开始
-     * @return          返回文件指纹。 
+     * @return          返回文件指纹。
      *                     1. 当目录下无任何文件时，指纹为空字符串。
      *                     2. 当文件内容为空时，指纹为空字符串。
      */
@@ -118,7 +118,7 @@ public class FileFingerprint
                 byte [] v_ContentByte = this.fileHelp.getContentByte(i_Folder);
                 if ( !Help.isNull(v_ContentByte) )
                 {
-                    v_Content = new String(Base64.getEncoder().encode(v_ContentByte) ,"UTF-8");
+                    v_Content = new String(Base64Factory.getIntance().encode(v_ContentByte) ,"UTF-8");
                 }
             }
             catch (IOException e)
@@ -156,7 +156,7 @@ public class FileFingerprint
                     byte [] v_ContentByte = this.fileHelp.getContentByte(v_File);
                     if ( !Help.isNull(v_ContentByte) )
                     {
-                        v_Content = new String(Base64.getEncoder().encode(v_ContentByte) ,"UTF-8");
+                        v_Content = new String(Base64Factory.getIntance().encode(v_ContentByte) ,"UTF-8");
                     }
                 }
                 catch (IOException e)
@@ -215,7 +215,7 @@ public class FileFingerprint
      *
      * @param i_Folder          父目录或文件
      * @param i_ExcludeFiles    排除在外的文件是哪些，格式如："|文件名称|"。为NULL时表示不排除
-     * @return                  返回文件指纹。 
+     * @return                  返回文件指纹。
      *                             1. 当目录下无任何文件时，指纹为空字符串。
      *                             2. 当文件内容为空时，指纹为空字符串。
      */
@@ -240,7 +240,7 @@ public class FileFingerprint
      * @param i_Folder          父目录或文件
      * @param i_ExcludeFiles    排除在外的文件是哪些，格式如："|文件名称|"。为NULL时表示不排除
      * @param i_ExcludeFolders  排除在外的目录是哪些，格式如："|目录名称|"。为NULL时表示不排除
-     * @return                  返回文件指纹。 
+     * @return                  返回文件指纹。
      *                             1. 当目录下无任何文件时，指纹为空字符串。
      *                             2. 当文件内容为空时，指纹为空字符串。
      */
@@ -266,7 +266,7 @@ public class FileFingerprint
      * @param i_ExcludeFiles    排除在外的文件是哪些，格式如："|文件名称|"。为NULL时表示不排除
      * @param i_ExcludeFolders  排除在外的目录是哪些，格式如："|目录名称|"。为NULL时表示不排除
      * @param i_Level           目录层级。有效下标从0开始
-     * @return                  返回文件指纹。 
+     * @return                  返回文件指纹。
      *                             1. 当目录下无任何文件时，指纹为空字符串。
      *                             2. 当文件内容为空时，指纹为空字符串。
      */
@@ -305,7 +305,7 @@ public class FileFingerprint
                 byte [] v_ContentByte = this.fileHelp.getContentByte(i_Folder);
                 if ( !Help.isNull(v_ContentByte) )
                 {
-                    v_Content = new String(Base64.getEncoder().encode(v_ContentByte) ,"UTF-8");
+                    v_Content = new String(Base64Factory.getIntance().encode(v_ContentByte) ,"UTF-8");
                 }
             }
             catch (IOException e)
@@ -348,7 +348,7 @@ public class FileFingerprint
                     byte [] v_ContentByte = this.fileHelp.getContentByte(v_File);
                     if ( !Help.isNull(v_ContentByte) )
                     {
-                        v_Content = new String(Base64.getEncoder().encode(v_ContentByte) ,"UTF-8");
+                        v_Content = new String(Base64Factory.getIntance().encode(v_ContentByte) ,"UTF-8");
                     }
                 }
                 catch (IOException e)

@@ -7,8 +7,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.hy.common.license.base64.Base64Factory;
 
 
 
@@ -66,13 +65,13 @@ public final class AES_V1 implements IAES
     
     
     /**
-     * 加密 
+     * 加密
      * 
-     * 1.构造密钥生成器 
-     * 2.根据ecnodeRules规则初始化密钥生成器 
-     * 3.产生密钥 
-     * 4.创建和初始化密码器 
-     * 5.内容加密 
+     * 1.构造密钥生成器
+     * 2.根据ecnodeRules规则初始化密钥生成器
+     * 3.产生密钥
+     * 4.创建和初始化密码器
+     * 5.内容加密
      * 6.返回字符串
      * 
      * @author      ZhengWei(HY)
@@ -82,6 +81,7 @@ public final class AES_V1 implements IAES
      * @param i_Content
      * @return
      */
+    @Override
     public String encrypt(String i_Content)
     {
         try
@@ -99,7 +99,7 @@ public final class AES_V1 implements IAES
             // 解决办法：
             // 在项目的Build path中先移除JRE System Library，再添加库JRE System
             // Library，重新编译后就一切正常了。
-            String AES_encode = new String(new BASE64Encoder().encode(byte_AES));
+            String AES_encode = new String(Base64Factory.getIntance().encode(byte_AES) ,"UTF-8");
             // 11.将字符串返回
             return AES_encode;
         }
@@ -116,8 +116,8 @@ public final class AES_V1 implements IAES
     /**
      * 解密
      * 
-     * 1.同加密1-4步 
-     * 2.将加密后的字符串反成byte[]数组 
+     * 1.同加密1-4步
+     * 2.将加密后的字符串反成byte[]数组
      * 3.将加密内容解密
      * 
      * @author      ZhengWei(HY)
@@ -127,6 +127,7 @@ public final class AES_V1 implements IAES
      * @param i_Content
      * @return
      */
+    @Override
     public String decrypt(String i_Content)
     {
         try
@@ -135,7 +136,7 @@ public final class AES_V1 implements IAES
             // 7.初始化密码器，第一个参数为加密(Encrypt_mode)或者解密(Decrypt_mode)操作，第二个参数为使用的KEY
             cipher.init(Cipher.DECRYPT_MODE ,this.key);
             // 8.将加密并编码后的内容解码成字节数组
-            byte [] byte_content = new BASE64Decoder().decodeBuffer(i_Content);
+            byte [] byte_content = Base64Factory.getIntance().decode(i_Content);
             // 解密
             byte [] byte_decode = cipher.doFinal(byte_content);
             String AES_decode = new String(byte_decode ,$CharsetName);

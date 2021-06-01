@@ -2,9 +2,11 @@ package org.hy.common.license.sha;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.hy.common.license.base64.Base64Factory;
 
 
 
@@ -64,7 +66,7 @@ public final class HmacSHA256 implements ISHA
     /**
      * 加密
      * 
-     *   公式为：URLEncode(Base64.encode(HmacSHA256(文本))) 
+     *   公式为：URLEncode(Base64.encode(HmacSHA256(文本)))
      * 
      * @author      ZhengWei(HY)
      * @createDate  2020-12-21
@@ -73,6 +75,7 @@ public final class HmacSHA256 implements ISHA
      * @param i_PlainText   明码文本
      * @return
      */
+    @Override
     public final String encrypt(String i_PlainText)
     {
         try
@@ -81,7 +84,7 @@ public final class HmacSHA256 implements ISHA
             v_Mac.init(new SecretKeySpec(privateKey, "HmacSHA256"));
             
             byte[] v_SignData         = v_Mac.doFinal(i_PlainText.getBytes(StandardCharsets.UTF_8));
-            String v_SignDataToEnCode = new String(Base64.getEncoder().encode(v_SignData) ,"UTF-8");
+            String v_SignDataToEnCode = new String(Base64Factory.getIntance().encode(v_SignData) ,"UTF-8");
             
             if ( isEncode )
             {

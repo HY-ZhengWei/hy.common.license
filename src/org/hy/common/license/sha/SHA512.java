@@ -2,7 +2,8 @@ package org.hy.common.license.sha;
 
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.util.Base64;
+
+import org.hy.common.license.base64.Base64Factory;
 
 
 
@@ -44,7 +45,7 @@ public class SHA512 implements ISHA
     /**
      * 加密
      * 
-     *   公式为：URLEncode(Base64.encode(SHA512(文本))) 
+     *   公式为：URLEncode(Base64.encode(SHA512(文本)))
      * 
      * @author      ZhengWei(HY)
      * @createDate  2021-01-14
@@ -53,6 +54,7 @@ public class SHA512 implements ISHA
      * @param i_Content
      * @return
      */
+    @Override
     public String encrypt(String i_Content)
     {
         try
@@ -60,7 +62,7 @@ public class SHA512 implements ISHA
             MessageDigest v_MessageDigest = MessageDigest.getInstance("SHA-512");
             v_MessageDigest.update(i_Content.getBytes("UTF-8"));
             
-            String v_Encode = new String(Base64.getEncoder().encode(v_MessageDigest.digest()) ,"UTF-8");
+            String v_Encode = new String(Base64Factory.getIntance().encode(v_MessageDigest.digest()) ,"UTF-8");
             
             if ( this.isEncode )
             {

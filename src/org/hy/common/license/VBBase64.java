@@ -24,19 +24,19 @@ public class VBBase64 implements ISymmetric
 {
     
     private static final byte [] $IP = { 57 ,49 ,41 ,33 ,25 ,17 ,9  ,1  ,59 ,51
-                                        ,43 ,35 ,27 ,19 ,11 ,3  ,61 ,53 ,45 ,37 
-                                        ,29 ,21 ,13 ,5  ,63 ,55 ,47 ,39 ,31 ,23 
-                                        ,15 ,7  ,56 ,48 ,40 ,32 ,24 ,16 ,8  ,0  
-                                        ,58 ,50 ,42 ,34 ,26 ,18 ,10 ,2  ,60 ,52 
-                                        ,44 ,36 ,28 ,20 ,12 ,4  ,62 ,54 ,46 ,38 
+                                        ,43 ,35 ,27 ,19 ,11 ,3  ,61 ,53 ,45 ,37
+                                        ,29 ,21 ,13 ,5  ,63 ,55 ,47 ,39 ,31 ,23
+                                        ,15 ,7  ,56 ,48 ,40 ,32 ,24 ,16 ,8  ,0
+                                        ,58 ,50 ,42 ,34 ,26 ,18 ,10 ,2  ,60 ,52
+                                        ,44 ,36 ,28 ,20 ,12 ,4  ,62 ,54 ,46 ,38
                                         ,30 ,22 ,14 ,6 };
  
-    private static final byte [] $IP_1 = {39 ,7  ,47 ,15 ,55 ,23 ,63 ,31 ,38 ,6 
+    private static final byte [] $IP_1 = {39 ,7  ,47 ,15 ,55 ,23 ,63 ,31 ,38 ,6
                                          ,46 ,14 ,54 ,22 ,62 ,30 ,37 ,5  ,45 ,13
                                          ,53 ,21 ,61 ,29 ,36 ,4  ,44 ,12 ,52 ,20
                                          ,60 ,28 ,35 ,3  ,43 ,11 ,51 ,19 ,59 ,27
-                                         ,34 ,2  ,42 ,10 ,50 ,18 ,58 ,26 ,33 ,1 
-                                         ,41 ,9  ,49 ,17 ,57 ,25 ,32 ,0  ,40 ,8 
+                                         ,34 ,2  ,42 ,10 ,50 ,18 ,58 ,26 ,33 ,1
+                                         ,41 ,9  ,49 ,17 ,57 ,25 ,32 ,0  ,40 ,8
                                          ,48 ,16 ,56 ,24 };
     
     private static final byte [] $P = {15 ,6  ,19 ,20 ,28 ,11 ,27 ,16 ,0  ,14
@@ -57,7 +57,7 @@ public class VBBase64 implements ISymmetric
                                          ,29 ,39 ,50 ,44 ,32 ,47 ,43 ,48 ,38 ,55
                                          ,33 ,52 ,45 ,41 ,49 ,35 ,28 ,31 };
     
-    private static final byte [] $Lsi = {0, 1 ,1 ,2 ,2 ,2 ,2 ,2 ,2 ,1 
+    private static final byte [] $Lsi = {0, 1 ,1 ,2 ,2 ,2 ,2 ,2 ,2 ,1
                                         ,2 ,2 ,2 ,2 ,2 ,2 ,1 };
     
     private static final byte [][] $S1 = {{14 ,4  ,13 ,1 ,2  ,15 ,11 ,8  ,3  ,10 ,6  ,12 ,5  ,9  ,0 ,7}
@@ -108,7 +108,7 @@ public class VBBase64 implements ISymmetric
     
     
     
-    static 
+    static
     {
         $E[0] = 31;
         
@@ -127,7 +127,7 @@ public class VBBase64 implements ISymmetric
     
     
     /**
-     * 将字节数组转为无符号的整数。如 -73(byte) 转换为 183(int) 
+     * 将字节数组转为无符号的整数。如 -73(byte) 转换为 183(int)
      * 
      * @author      ZhengWei(HY)
      * @createDate  2020-06-16
@@ -347,12 +347,38 @@ public class VBBase64 implements ISymmetric
             v_Buffer.append(v_Ret[i]);
             
             if ( i < v_Ret.length - 1 )
-            {   
+            {
                 v_Buffer.append(",");
             }
         }
         
         return StrConv.toBase64(v_Buffer.toString());
+    }
+    
+    
+    
+    /**
+     * 解密
+     * 
+     * 建议：使用性能更高、算法更快的 (new VBBase64(i_Key)).decrypt(i_Password);
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2019-05-21
+     * @version     v1.0
+     *
+     * @param i_Password  密文
+     * @param i_Key       密钥
+     * @return
+     */
+    @Deprecated
+    public static String decode(String i_Password ,String i_Key)
+    {
+        if ( Help.isNull(i_Password) || Help.isNull(i_Key) )
+        {
+            return "";
+        }
+        
+        return decrypt(i_Password ,makeKey(i_Key));
     }
     
     
@@ -550,7 +576,7 @@ public class VBBase64 implements ISymmetric
         
         if ( v_Lsi == 1 )
         {
-            for (int i=0; i<=26; i++) 
+            for (int i=0; i<=26; i++)
             {
                 io_Cy[i] = i_Cx[i + v_Lsi];
                 io_Dy[i] = i_Dx[i + v_Lsi];
@@ -560,7 +586,7 @@ public class VBBase64 implements ISymmetric
         }
         else if ( v_Lsi == 2 )
         {
-            for (int i=0; i<=25; i++) 
+            for (int i=0; i<=25; i++)
             {
                 io_Cy[i] = i_Cx[i + v_Lsi];
                 io_Dy[i] = i_Dx[i + v_Lsi];
@@ -581,7 +607,7 @@ public class VBBase64 implements ISymmetric
      * @createDate  2019-05-22
      * @version     v1.0
      *
-     * @param i_C   
+     * @param i_C
      * @param i_D
      * @param io_K
      */
@@ -684,7 +710,7 @@ public class VBBase64 implements ISymmetric
     
     
     /**
-     * 加密 
+     * 加密
      * 
      * @author      ZhengWei(HY)
      * @createDate  2021-01-06
@@ -693,6 +719,7 @@ public class VBBase64 implements ISymmetric
      * @param i_Content
      * @return
      */
+    @Override
     public String encrypt(String i_Content)
     {
         if ( Help.isNull(i_Content) )
@@ -715,7 +742,8 @@ public class VBBase64 implements ISymmetric
      * @param i_Content
      * @return
      */
-    public String decrypt(String i_Content) 
+    @Override
+    public String decrypt(String i_Content)
     {
         if ( Help.isNull(i_Content) )
         {
