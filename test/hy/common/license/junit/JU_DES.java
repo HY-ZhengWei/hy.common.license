@@ -1,9 +1,8 @@
 package hy.common.license.junit;
 
 import org.hy.common.license.DES;
+import org.hy.common.xml.log.Logger;
 import org.junit.Test;
-
-import com.sun.istack.internal.logging.Logger;
 
 
 

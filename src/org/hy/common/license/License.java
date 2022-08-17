@@ -1,6 +1,8 @@
 package org.hy.common.license;
 
+import org.hy.common.Date;
 import org.hy.common.Help;
+import org.hy.common.license.base64.Base64Factory;
 import org.hy.common.xml.SerializableDef;
 
 
@@ -30,6 +32,12 @@ public class License extends SerializableDef
     
     /** 授权码 */
     private String licenseCode;
+    
+    /** 授权在线数量 */
+    private String onLineCount;
+    
+    /** 授权最大数量 */
+    private String maxCount;
 
     
     
@@ -46,7 +54,7 @@ public class License extends SerializableDef
     /**
      * 设置：生效时间
      * 
-     * @param runTime 
+     * @param runTime
      */
     public void setRunTime(String runTime)
     {
@@ -68,7 +76,7 @@ public class License extends SerializableDef
     /**
      * 设置：到期时间
      * 
-     * @param time 
+     * @param time
      */
     public void setTime(String time)
     {
@@ -90,7 +98,7 @@ public class License extends SerializableDef
     /**
      * 设置：License的格式
      * 
-     * @param format 
+     * @param format
      */
     public void setFormat(String format)
     {
@@ -112,7 +120,7 @@ public class License extends SerializableDef
     /**
      * 设置：授权码
      * 
-     * @param licenseCode 
+     * @param licenseCode
      */
     public void setLicenseCode(String licenseCode)
     {
@@ -121,6 +129,50 @@ public class License extends SerializableDef
     
     
     
+    /**
+     * 获取：授权在线数量
+     */
+    public String getOnLineCount()
+    {
+        return onLineCount;
+    }
+
+
+
+    /**
+     * 设置：授权在线数量
+     * 
+     * @param onLineCount
+     */
+    public void setOnLineCount(String onLineCount)
+    {
+        this.onLineCount = onLineCount;
+    }
+
+
+
+    /**
+     * 获取：授权最大数量
+     */
+    public String getMaxCount()
+    {
+        return maxCount;
+    }
+
+
+
+    /**
+     * 设置：授权最大数量
+     * 
+     * @param maxCount
+     */
+    public void setMaxCount(String maxCount)
+    {
+        this.maxCount = maxCount;
+    }
+
+
+
     /**
      * 验证基本信息
      * 
@@ -143,6 +195,102 @@ public class License extends SerializableDef
         }
         
         return true;
+    }
+    
+    
+    
+    /**
+     * 验证许可证书
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2022-08-17
+     * @version     v1.0
+     * 
+     * @param io_License
+     * @param i_Register     机器特征码
+     * @param i_PublicKey    公钥
+     * @param i_OnLineCount  授权在线数量
+     * @param i_MaxCount     授权最大数量
+     * @return
+     */
+    public static int verifyLicense(License io_License ,String i_Register ,String i_PublicKey ,Integer i_OnLineCount ,Integer i_MaxCount)
+    {
+        if ( !io_License.verify() )
+        {
+            // "没有许可信息，请用注册码注册：" + makeRegister());
+            return -1;
+        }
+        
+        try
+        {
+            String v_PublicKey = io_License.getLicenseCode().split("#")[0];
+            String v_Sign      = io_License.getLicenseCode().split("#")[1];
+            
+            if ( !i_PublicKey.equals(v_PublicKey) )
+            {
+                return -2;
+            }
+            
+            io_License.setLicenseCode(null);
+            
+            String    v_MachineID = i_Register + io_License.toString();
+            Symmetric v_Symmetric = new Symmetric(i_Register);
+            
+            boolean v_Verify = SignProvider.verify(v_PublicKey ,v_MachineID ,v_Sign);
+            if ( !v_Verify )
+            {
+                return -2;
+            }
+            
+            Date v_NowTime = new Date();
+            Date v_RunTime = new Date(new String(Base64Factory.getIntance().decode(io_License.getRunTime())));
+            if ( v_RunTime == null || v_NowTime.differ(v_RunTime) <= 0L )
+            {
+                return -3;
+            }
+            
+            Date v_Time = new Date(new String(Base64Factory.getIntance().decode(io_License.getTime())));
+            if ( v_Time == null || v_NowTime.differ(v_Time) >= 0L )
+            {
+                return -4;
+            }
+            
+            Integer v_OnLineCount = Integer.parseInt(v_Symmetric.decrypt(io_License.getOnLineCount()));
+            if ( v_OnLineCount != null && v_OnLineCount > 0 )
+            {
+                if ( i_OnLineCount == null )
+                {
+                    return -5;
+                }
+                
+                if ( i_OnLineCount.intValue() > v_OnLineCount.intValue() )
+                {
+                    return -5;
+                }
+            }
+            
+            Integer v_MaxCount = Integer.parseInt(v_Symmetric.decrypt(io_License.getMaxCount()));
+            if ( v_MaxCount != null && v_MaxCount > 0 )
+            {
+                if ( i_MaxCount == null )
+                {
+                    return -6;
+                }
+                
+                if ( i_MaxCount.intValue() > v_MaxCount.intValue() )
+                {
+                    return -6;
+                }
+            }
+            
+            return 0;
+        }
+        catch (Exception exce)
+        {
+            // Nothing.
+        }
+        
+        return -99;
     }
     
 }

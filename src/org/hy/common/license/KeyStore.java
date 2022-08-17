@@ -86,9 +86,35 @@ public final class KeyStore
     
     
     
-    private KeyStore()
+    
+    
+    public KeyStore()
     {
         // 私有构造器
+    }
+    
+    
+    
+    /**
+     * 设置私钥
+     * 
+     * @param i_PrivateKey
+     */
+    public void setPrivateKey(String i_PrivateKey)
+    {
+        this.privateKey = i_PrivateKey.getBytes();
+    }
+    
+    
+    
+    /**
+     * 设置公钥
+     * 
+     * @param i_PrivateKey
+     */
+    public void setPublicKey(String i_PublicKey)
+    {
+        this.publicKey = i_PublicKey.getBytes();
     }
     
     

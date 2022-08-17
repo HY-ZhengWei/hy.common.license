@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hy.common.Date;
-import org.hy.common.license.SignProvider;
 import org.hy.common.license.Signaturer;
 import org.junit.Test;
 
@@ -35,35 +34,6 @@ public class JU_Signaturer
         System.out.println("时间戳：" + v_Timestamp);
         System.out.println("生成签名：" + v_Signaturer.sign("appKey" + "0904202FB2EA4AC3A899B423928A0F8E" + "timestamp" + v_Timestamp));
         System.out.println("签名转义：" + URLEncoder.encode(v_Signaturer.sign("appKey" + "0904202FB2EA4AC3A899B423928A0F8E" + "timestamp" + v_Timestamp) ,"UTF-8"));
-    }
-    
-    
-    
-    @Test
-    public void test_V1_XSSO() throws UnsupportedEncodingException
-    {
-        Signaturer v_Signaturer = new Signaturer(1 ,"MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKqLpw60A4bkPsJW5BOYdM4PfOwdx/389AmlKHEAELVrvh1RsTcplt1adQBBz2iCM0tQruSyU3P5/s9j1U1C8Cx0WVYhAIRNhZ5xZcdo91xg92URCZpdQ9QX0ATSPTKK6ZvAMbhFzYFD/MOzaFS51dHdejiJqK9KFeRSzuyHOnfLAgMBAAECgYEAkt1ihpnks6QYm5jiHjHa3Jyf0mGvGP1dVnUAx5brzJ+0/2CbQMqy3XoJaahCqVf+PiyD//PFRAmUMhph1IABfI2LzzDS8DYjrzV05ahFts2sFMbWcDK4f0C/Cmz0vx+Ggn3+DsVqzTyX8IejJChBGWXJk6VDCWZVcsQgpz/FopECQQDkLEmWOsbsa1lN6eZb6ZKqFI00/frpVa5RyvN1whr+j2/FjuUTyekohnYo3uXjYlufPx5uqAJMj3pY/AZ8GH3pAkEAv1gyaRiprKe8/S5haANhx0/E+M2Ik7FkXqDyoAfXE48z1CG3jPahux7ce4UAj3l96f4KXb4iOhdA527PMrbzkwJBAM62ZLBKbZ8QHebdSYnpUKrvVYI1ulQcAIIvWGNNx8DpV7xmGZjU6nuBXZjnXuOiXxklSL+9S9/qeFAXexR/58kCQQCHVwfZBGPHRqHLZsno+zNm+co1vZMT/E4lDKxwevsqz4h2TB77Ktt8cji7eXjLAsEIB/MnGTw2YIo86EjP803XAkAb5vgG94qKDErmO5xSzbKfwXdc4jC0wn+sXvLTOkzkmsLXS5m3WGVwJhcF6IVHkRKoupwg/bA/zIFNxsGE1os+");
-        long       v_Timestamp  = Date.getNowTime().getTime();
-        String     v_Code       = "appKey" + "D22DCADC06BB4EAE868D5728AACAD370" + "timestamp" + v_Timestamp;
-        String     v_Signature  = v_Signaturer.sign(v_Code);
-        
-        System.out.println("时间戳："   + v_Timestamp);
-        System.out.println("生成签名：" + v_Signature);
-        System.out.println("签名转义：" + URLEncoder.encode(v_Signature ,"UTF-8"));
-    
-    
-        boolean v_Verify = SignProvider.verify("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCqi6cOtAOG5D7CVuQTmHTOD3zsHcf9/PQJpShxABC1a74dUbE3KZbdWnUAQc9ogjNLUK7kslNz+f7PY9VNQvAsdFlWIQCETYWecWXHaPdcYPdlEQmaXUPUF9AE0j0yiumbwDG4Rc2BQ/zDs2hUudXR3Xo4iaivShXkUs7shzp3ywIDAQAB".getBytes() 
-                                              ,v_Code
-                                              ,v_Signature.getBytes());
-
-        if ( v_Verify )
-        {
-            System.out.println("验证成功.");
-        }
-        else
-        {
-            System.err.println("验证失败.");
-        }
     }
     
     

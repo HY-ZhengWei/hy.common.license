@@ -2,19 +2,22 @@
 
 <hy-licenses>
 
-	<import name="licenses"        class="java.util.ArrayList" />
-	<import name="license"         class="org.hy.common.license.License" />
-	
-	
-	
-	<licenses>
-	
-		<license id="License">
-			<runTime>2017-01-01 00:00:00</runTime>
-			<time>2018-01-01 00:00:00</time>
-			<format>1.0</format>
-		</license>
-		
-	</licenses>
-	
+    <import name="licenses"        class="java.util.ArrayList" />
+    <import name="license"         class="org.hy.common.license.License" />
+    
+    
+    
+    <licenses>
+    
+        <license id="License">
+            <runTime>MjAyMi0wMS0wMSAwMDowMDowMA==</runTime>
+            <time>MjAyMi0xMi0zMSA1OTo1OTo1OQ==</time>
+            <format>1.0</format>
+            <onLineCount>x8mt+pDCxpQ/AYAOw+wNkA==</onLineCount>
+            <maxCount>ig4/xNvdfP2ORdxLcGBl1w==</maxCount>
+            <licenseCode>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDSDP6YK66JShurdzf7pxTxx+UDlXqhDQhZ2pqHTd5Oh/dAyWUOft1KgWoKNQCAB5n2KFlEXIfmWtU4p/zmThZrpVSrEctYLDsdUZaqQ7mb0MDiv7nmMsu2Tu7vjRb8iL403SeaC9rPUmdloa4r+U1DuqYbSb03qK+WiaotsaZRvwIDAQAB#Ust6Ozh8WDRKYW4vJgCSvpkepR0aMPwpOrdfQnvcQL2N/TzDfSLgI0PubRUGrH270Ttf3Kmp+ULzc/W2o/O83/JJunEdABPMoob9sjEpqfo2Ni6ilmNU7V33Sv46qDFpuASpavgSPPfk1GUZz6kEVNwENNoVEqUCzyVpSJyfFiw=</licenseCode>
+        </license>
+        
+    </licenses>
+    
 </hy-licenses>
