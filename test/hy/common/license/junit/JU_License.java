@@ -4,11 +4,11 @@ import java.io.IOException;
 
 import org.hy.common.Date;
 import org.hy.common.Help;
-import org.hy.common.StringHelp;
 import org.hy.common.file.FileHelp;
 import org.hy.common.license.KeyStore;
 import org.hy.common.license.License;
 import org.hy.common.license.LicenseFactory;
+import org.hy.common.license.LicenseRegister;
 import org.hy.common.xml.XJava;
 import org.hy.common.xml.annotation.XType;
 import org.hy.common.xml.annotation.Xjava;
@@ -21,6 +21,13 @@ import org.junit.runners.MethodSorters;
 
 
 
+/**
+ * 原理
+ * 
+ * 首先需要生成密钥对，方法有很多，JDK中提供的KeyTool即可生成。
+ * 授权者保留私钥，使用私钥对包含授权信息（如截止日期，MAC地址等）的license进行数字签名。
+ * 公钥交给使用者（放在验证的代码中使用），用于验证license是否符合使用条件。
+ */
 @Xjava(value=XType.XML)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JU_License
@@ -50,26 +57,6 @@ public class JU_License
     
     
     
-    /**
-     * 生成注册码
-     * 
-     * @author      ZhengWei(HY)
-     * @createDate  2017-07-24
-     * @version     v1.0
-     *
-     * @return
-     */
-    public String makeRegister()
-    {
-        StringBuilder v_Builder = new StringBuilder();
-        
-        v_Builder.append(StringHelp.replaceAll(Help.getMacs() ,new String[]{"-" ,";"} ,new String[]{""}));
-        
-        return v_Builder.toString();
-    }
-    
-    
-    
     @Test
     public void test_License_Setp00_MakeKey()
     {
@@ -87,7 +74,7 @@ public class JU_License
         
         if ( v_License == null || !v_License.verify() )
         {
-            System.out.println("没有许可信息，请用注册码注册：" + makeRegister());
+            System.out.println("没有许可信息，请用注册码注册：" + LicenseRegister.makeRegister());
             return;
         }
     }
@@ -98,7 +85,7 @@ public class JU_License
     public void test_License_Setp02_Server() throws IOException
     {
         KeyStore v_KeyStore = new KeyStore();
-        String   v_Register = makeRegister();
+        String   v_Register = LicenseRegister.makeRegister();
         License  v_License  = new License();
         
         v_KeyStore.setPublicKey ("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDSDP6YK66JShurdzf7pxTxx+UDlXqhDQhZ2pqHTd5Oh/dAyWUOft1KgWoKNQCAB5n2KFlEXIfmWtU4p/zmThZrpVSrEctYLDsdUZaqQ7mb0MDiv7nmMsu2Tu7vjRb8iL403SeaC9rPUmdloa4r+U1DuqYbSb03qK+WiaotsaZRvwIDAQAB");
@@ -127,13 +114,12 @@ public class JU_License
         
         if ( v_License == null || !v_License.verify() )
         {
-            System.out.println("没有许可信息，请用注册码注册：" + makeRegister());
+            System.out.println("没有许可信息，请用注册码注册：" + LicenseRegister.makeRegister());
             return;
         }
         
-        String v_Register  = makeRegister();
         String v_PublicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDSDP6YK66JShurdzf7pxTxx+UDlXqhDQhZ2pqHTd5Oh/dAyWUOft1KgWoKNQCAB5n2KFlEXIfmWtU4p/zmThZrpVSrEctYLDsdUZaqQ7mb0MDiv7nmMsu2Tu7vjRb8iL403SeaC9rPUmdloa4r+U1DuqYbSb03qK+WiaotsaZRvwIDAQAB";
-        int    v_Ret       = License.verifyLicense(v_License ,v_Register ,v_PublicKey ,1 ,2);
+        int    v_Ret       = License.verifyLicense(v_License ,v_PublicKey ,1 ,2);
         if ( v_Ret == 0 )
         {
             System.out.println("验证成功.");

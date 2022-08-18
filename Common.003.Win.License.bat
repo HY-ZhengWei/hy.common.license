@@ -4,6 +4,7 @@ cd .\bin
 
 
 rd /s/q .\org\hy\common\license\junit
+del  /q .\org\hy\common\license\LicenseFactory.class
 
 
 jar cvfm hy.common.license.jar MANIFEST.MF META-INF org

@@ -4,6 +4,7 @@ cd ./bin
 
 
 rm -R ./org/hy/common/license/junit
+rm    ./org/hy/common/license/LicenseFactory.class
 
 
 jar cvfm hy.common.license.jar MANIFEST.MF META-INF org

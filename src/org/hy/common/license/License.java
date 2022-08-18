@@ -207,13 +207,12 @@ public class License extends SerializableDef
      * @version     v1.0
      * 
      * @param io_License
-     * @param i_Register     机器特征码
      * @param i_PublicKey    公钥
      * @param i_OnLineCount  授权在线数量
      * @param i_MaxCount     授权最大数量
      * @return
      */
-    public static int verifyLicense(License io_License ,String i_Register ,String i_PublicKey ,Integer i_OnLineCount ,Integer i_MaxCount)
+    public static int verifyLicense(License io_License ,String i_PublicKey ,Integer i_OnLineCount ,Integer i_MaxCount)
     {
         if ( !io_License.verify() )
         {
@@ -223,6 +222,7 @@ public class License extends SerializableDef
         
         try
         {
+            String v_Register  = LicenseRegister.makeRegister();
             String v_PublicKey = io_License.getLicenseCode().split("#")[0];
             String v_Sign      = io_License.getLicenseCode().split("#")[1];
             
@@ -233,8 +233,8 @@ public class License extends SerializableDef
             
             io_License.setLicenseCode(null);
             
-            String    v_MachineID = i_Register + io_License.toString();
-            Symmetric v_Symmetric = new Symmetric(i_Register);
+            String    v_MachineID = v_Register + io_License.toString();
+            Symmetric v_Symmetric = new Symmetric(v_Register);
             
             boolean v_Verify = SignProvider.verify(v_PublicKey ,v_MachineID ,v_Sign);
             if ( !v_Verify )
