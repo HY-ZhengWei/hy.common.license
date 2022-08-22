@@ -282,6 +282,8 @@ public class License extends SerializableDef
                     return -6;
                 }
             }
+
+            io_License.setTime(v_Time.getFull());
             
             return 0;
         }
