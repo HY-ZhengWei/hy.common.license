@@ -43,7 +43,7 @@ public final class LicenseFactory
         io_License.setTime   (new String(Base64Factory.getIntance().encode(io_License.getTime())));
         io_License.setFormat (Help.NVL(io_License.getFormat() ,"1.0"));
         io_License.setMaxCount(   v_Symmetric.encrypt(io_License.getMaxCount()));
-        io_License.setOnLineCount(v_Symmetric.encrypt("64"));
+        io_License.setOnLineCount(v_Symmetric.encrypt(io_License.getOnLineCount()));
         io_License.setLicenseCode(null);
         
         String v_MachineID = i_Register + io_License.toString();

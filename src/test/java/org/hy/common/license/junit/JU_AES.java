@@ -70,4 +70,27 @@ public class JU_AES
         System.out.println(URLEncoder.encode(v_AESPassword ,"UTF-8"));
     }
     
+    
+    
+    @Test
+    public void test_AES_V2_encrypt_2() throws UnsupportedEncodingException
+    {
+        String [] v_XIDs          = {"201912"       ,"dataCenter" ,"mes_assy" ,"Apollo-PMP-Group" ,"pmp"  ,"pscm"};
+        String [] v_Pwd_UserNames = {"sa"           ,"root"       ,"root"     ,"-"                ,"root" ,"root"};
+        String [] v_Pwd_Passwords = {"Apollo123!@#" ,"apollo123Mysql"};
+        
+        for (int x=0; x<v_XIDs.length; x++)
+        {
+            String v_XID          = v_XIDs[x];
+            String v_Pwd_UserName = v_Pwd_UserNames[x];
+            String v_Pwd_Password = v_Pwd_UserName.equals("-") ? "-" : v_Pwd_UserName.equals("sa") ? v_Pwd_Passwords[0] : v_Pwd_Passwords[1];
+            AES    v_AES_UN       = new AES(2 ,v_XID + "-userName-org.hy.common.Help");
+            AES    v_AES_PW       = new AES(2 ,v_XID + "-password-org.hy.common.Help");
+            
+            System.out.println(v_XID + "  encrypt:" + v_AES_UN.encrypt(v_Pwd_UserName));
+            System.out.println(v_XID + "  encrypt:" + v_AES_PW.encrypt(v_Pwd_Password) + "\n\n");
+        }
+        
+    }
+    
 }

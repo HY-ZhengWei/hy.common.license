@@ -9,9 +9,11 @@ import org.hy.common.license.KeyStore;
 import org.hy.common.license.License;
 import org.hy.common.license.LicenseFactory;
 import org.hy.common.license.LicenseRegister;
+// import org.hy.common.xml.XJava;
+// import org.hy.common.xml.annotation.XType;
+// import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.log.Logger;
 import org.junit.FixMethodOrder;
-import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 
@@ -54,7 +56,7 @@ public class JU_License
     
     
     
-    @Test
+    // @Test
     public void test_License_Setp00_MakeKey()
     {
         KeyStore v_KeyStore = KeyStore.generater();
@@ -82,14 +84,14 @@ public class JU_License
     public void test_License_Setp02_Server() throws IOException
     {
         KeyStore v_KeyStore = new KeyStore();
-        String   v_Register = LicenseRegister.makeRegister();
+        String   v_Register = LicenseRegister.makeRegister();   // 此码应从执行验证的服务器上获取
         License  v_License  = new License();
         
         v_KeyStore.setPublicKey ("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDSDP6YK66JShurdzf7pxTxx+UDlXqhDQhZ2pqHTd5Oh/dAyWUOft1KgWoKNQCAB5n2KFlEXIfmWtU4p/zmThZrpVSrEctYLDsdUZaqQ7mb0MDiv7nmMsu2Tu7vjRb8iL403SeaC9rPUmdloa4r+U1DuqYbSb03qK+WiaotsaZRvwIDAQAB");
         v_KeyStore.setPrivateKey("MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBANIM/pgrrolKG6t3N/unFPHH5QOVeqENCFnamodN3k6H90DJZQ5+3UqBago1AIAHmfYoWURch+Za1Tin/OZOFmulVKsRy1gsOx1RlqpDuZvQwOK/ueYyy7ZO7u+NFvyIvjTdJ5oL2s9SZ2Whriv5TUO6phtJvTeor5aJqi2xplG/AgMBAAECgYApsdyjtiAKLoS5j4u0T2Ev8T77bCOQbnbW5za/Xuye6AxjdtaxfutMS84Rwp2bzGZ6X14A3OE5D5S9j1L7IEsArRixJLzciDnti0VUJE5plKOzHdHNMYSdI45iGUL1ezLWe9mNPVszAGBBUKr+vYkESo6cl7D+GyYmtQeRfiMsGQJBAOvs92P5piNT4bVGuun/LbZw2SRaqBRzP3aHN7F5qAeFHereCWo/1PFnmi94TRVUSnM11eHpZX2AmgFZJvYlZF0CQQDj7GkCdQDnvFFzNLscW/R3wt4RRMZJ6v+b3P2B+h7CWmlyFH1jKAIU5YynKN/sTSmeSFIIiB790bFRJtg3wuzLAkEAxzBW3s3Ue1dC5W5GOXH9Al/ctVjlN/7lwgj/+JOiTlcRn06/3DjwbLDv+Mw1KKD2CreVURthWMjPPfwrbP688QJARWuHHFl4uhxQjo9cAio7zpJKwuW4o2DxE47+o60D21xgS3/UJPRVlfnImk1Hzpg9+di7K6ASGGra4AW9y1YSewJAK6vichWZDCsw/FFAvXeto+SXePkq+R2iRED4WQfcpD0bD3IzdzLkrhmfPcnk3LLSKPr5eeB3AnpL3yUZu91lhw==");
         
-        v_License.setRunTime("2022-01-01 00:00:00");
-        v_License.setTime   ("2022-12-31 59:59:59");
+        v_License.setRunTime("2023-01-01 00:00:00");
+        v_License.setTime   ("2025-12-31 59:59:59");
         v_License.setFormat ("1.0");
         v_License.setMaxCount("100");
         v_License.setOnLineCount("64");
@@ -107,7 +109,7 @@ public class JU_License
     // @Test
     public void test_License_Setp03_Client()
     {
-        License v_License = null; //(License)XJava.getObject("License");
+        License v_License = null; // (License)XJava.getObject("License");
         
         for (int x=1; x<=10; x++)
         {

@@ -12,6 +12,7 @@ rd /s/q .\org\hy\common\license\junit
 del  /q .\org\hy\common\license\LicenseFactory.class
 
 
+
 jar cvfm hy.common.license.jar META-INF/MANIFEST.MF META-INF org
 
 copy hy.common.license.jar ..\..
