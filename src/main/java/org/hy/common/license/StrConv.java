@@ -41,13 +41,13 @@ import java.io.UnsupportedEncodingException;
 
 import org.hy.common.ByteHelp;
 
-public class StrConv 
+public class StrConv
 {
     
     /**
      * Creates a new instance of Strconv
      */
-    private StrConv() 
+    private StrConv()
     {
     }
     
@@ -84,7 +84,7 @@ public class StrConv
      *
      * @param i_Datas
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     public static String vbUnicode(int [] i_Datas) throws UnsupportedEncodingException
     {
@@ -240,8 +240,7 @@ public class StrConv
         int c = 0;
         for (int i = 0; i < srcLen; i++)
         {
-            c = (int) str.charAt(i);
-            // TODO: åñêýéïèòü êîäû <0x20
+            c = str.charAt(i);
             if ( (c >= 1) && (c <= 0x7f) )
             {
                 outbuf.append((char) c);
@@ -355,7 +354,6 @@ public class StrConv
                 c += 'a' - 'A'; // default latin chars
             if ( c > 0x40f && c < 0x430 )
                 c += 0x430 - 0x410; // cyrillic chars
-            // TODO: other schemes by request
             dst.setCharAt(i ,c);
         }
         return dst.toString();

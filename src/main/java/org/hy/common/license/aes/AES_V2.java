@@ -39,7 +39,7 @@ public final class AES_V2 implements IAES
         {
             String v_PrivateKey = StringHelp.rpad(i_PrivateKey ,16 ," ");
             
-            IvParameterSpec v_ParamSpec = new IvParameterSpec($Key.getBytes());
+            IvParameterSpec v_ParamSpec = new IvParameterSpec($Key.getBytes());  // 初始向量
             SecretKeySpec   v_KeySpec   = new SecretKeySpec(v_PrivateKey.substring(0 ,16).getBytes(), $AES_Name);
             
             this.cipherEncrypt = Cipher.getInstance($AES_Cipher);

@@ -93,4 +93,25 @@ public class JU_AES
         
     }
     
+    
+    
+    @Test
+    public void test_AES_V2_decrypt_cdc()
+    {
+        AES v_Aes = new AES(2 ,"dataTest2223" + "-password-org.hy.common.Help");
+        System.out.println(v_Aes.decrypt("QsghdBqheJYbj3zz8J9sWg=="));
+    }
+    
+    
+    @Test
+    public void test_AES_V2_encrypt_cdc()
+    {
+        AES v_Aes_U = new AES(2 ,"dataCenter" + "-userName-org.hy.common.Help");
+        System.out.println(v_Aes_U.encrypt("root"));
+        
+        
+        AES v_Aes_P = new AES(2 ,"dataCenter" + "-password-org.hy.common.Help");
+        System.out.println(v_Aes_P.encrypt("wzybVM9114"));
+    }
+    
 }

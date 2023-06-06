@@ -24,9 +24,9 @@ public class JU_DES
     @Test
     public void test()
     {
-        DES v_Des = new DES("DS_OA" + "-" + "user" + "-" + "org.hy.common.StringHelp");
+        DES v_Des = new DES("DSG_MS_阿波罗_Target_TestVue6" + "-" + "user" + "-" + "org.hy.common.StringHelp");
         
-        $Logger.info(v_Des.decrypt("TlzbKfnd/40="));
+        $Logger.info(v_Des.decrypt("QsghdBqheJYbj3zz8J9sWg=="));
     }
     
     
@@ -34,8 +34,8 @@ public class JU_DES
     @Test
     public void test02()
     {
-        DES    v_Des  = new DES("DSG_MS_阿波罗_Target_MQ" + "-password-org.hy.common.Help");
-        String v_Text = v_Des.decrypt("ZzO4cQt8NoU=");
+        DES    v_Des  = new DES("DSG_MS_阿波罗_Source_PDM" + "-password-org.hy.common.Help");
+        String v_Text = v_Des.decrypt("WN6lkRFRZZe/dk8xfhYSKQ==");
         
         $Logger.info(v_Text);
     }
