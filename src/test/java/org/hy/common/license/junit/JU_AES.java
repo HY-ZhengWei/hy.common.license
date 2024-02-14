@@ -98,8 +98,8 @@ public class JU_AES
     @Test
     public void test_AES_V2_decrypt_cdc()
     {
-        AES v_Aes = new AES(2 ,"dataTest2223" + "-password-org.hy.common.Help");
-        System.out.println(v_Aes.decrypt("QsghdBqheJYbj3zz8J9sWg=="));
+        AES v_Aes = new AES(2 ,"MS_Message_Analyses_Password" + "-password-org.hy.common.StringHelp");
+        System.out.println(v_Aes.decrypt("of9po355gkCTDhHN0ATGWTL9p/Z9uCFv"));
     }
     
     
