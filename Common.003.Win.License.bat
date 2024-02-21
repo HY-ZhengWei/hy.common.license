@@ -30,3 +30,5 @@ copy hy.common.license-sources.jar ..\..\..
 del /Q hy.common.license-sources.jar
 rd /s/q META-INF
 cd ..\..\..
+
+pause
