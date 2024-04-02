@@ -111,7 +111,7 @@ public class JU_AES
         
         
         AES v_Aes_P = new AES(2 ,"dataCenter" + "-password-org.hy.common.Help");
-        System.out.println(v_Aes_P.encrypt("wzybVM9114"));
+        System.out.println(v_Aes_P.encrypt(""));
     }
     
 }
