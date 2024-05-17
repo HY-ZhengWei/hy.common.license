@@ -6,33 +6,19 @@
 
     <groupId>org</groupId>
     <artifactId>hy.common.license</artifactId>
-    <version>1.1.9</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
 
-    <name>cn.openapis.hy.common.license</name>
+    <name>org.hy.common.license</name>
     <!-- https://gitee.com/HY-ZhengWei/hy.common.license -->
     <url>https://github.com/HY-ZhengWei/hy.common.license</url>
-    <description>cn.openapis.hy.common.license</description>
+    <description>org.hy.common.license</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>maven-public</id>
-            <name>oss sonatype snapshots</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
-        </snapshotRepository>
-
-        <repository>
-            <id>maven-public</id>
-            <name>oss sonatype releases</name>
-            <url>https://s01.oss.sonatype.org/content/repositories/releases/</url>
-        </repository>
-    </distributionManagement>
 
     <licenses>
         <license>
@@ -52,16 +38,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>cn.openapis</groupId>
+            <groupId>org</groupId>
             <artifactId>hy.common.base</artifactId>
-            <version>1.0.183</version>
+            <version>1.0.184</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>cn.openapis</groupId>
+            <groupId>org</groupId>
             <artifactId>hy.common.file</artifactId>
-            <version>1.3.0</version>
+            <version>1.3.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -72,13 +58,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <scm>
-        <tag>master</tag>
-        <url>git@github.com:HY-ZhengWei/hy.common.license.git</url>
-        <connection>git@github.com:HY-ZhengWei/hy.common.license.git</connection>
-        <developerConnection>git@github.com:HY-ZhengWei/hy.common.license.git</developerConnection>
-    </scm>
 
     <build>
         <resources>
