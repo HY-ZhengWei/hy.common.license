@@ -32,7 +32,7 @@ public class JU_AppKey
         v_AppKey.setPrivateKey(v_KeyStore.getPrivateKeyString());
         
         
-        System.out.println("-- appKey："   + v_AppKey.getAppKey());
+        System.out.println("-- appKey："  + v_AppKey.getAppKey());
         System.out.println("-- 应用公匙：" + v_AppKey.getPublicKey());
         System.out.println("-- 应用私匙：" + v_AppKey.getPrivateKey());
     }
