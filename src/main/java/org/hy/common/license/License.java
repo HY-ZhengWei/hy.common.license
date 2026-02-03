@@ -15,6 +15,7 @@ import org.hy.common.xml.SerializableDef;
  * @author      ZhengWei(HY)
  * @createDate  2017-07-24
  * @version     v1.0
+ *              v2.0  2026-02-03  添加：验证许可证书通过时返回授权在线数量、授权最大数量
  */
 public class License extends SerializableDef
 {
@@ -210,7 +211,13 @@ public class License extends SerializableDef
      * @param i_PublicKey    公钥
      * @param i_OnLineCount  授权在线数量
      * @param i_MaxCount     授权最大数量
-     * @return
+     * @return               0：合法的许可证书
+     *                      -1：没有许可信息
+     *                      -2：非法公钥
+     *                      -3：未到许可证书的生效时间
+     *                      -4：许可证书到期
+     *                      -5：授权在线数量不满足
+     *                      -6：授权最大数量不满足
      */
     public static int verifyLicense(License io_License ,String i_PublicKey ,Integer i_OnLineCount ,Integer i_MaxCount)
     {
@@ -258,6 +265,7 @@ public class License extends SerializableDef
             Integer v_OnLineCount = Integer.parseInt(v_Symmetric.decrypt(io_License.getOnLineCount()));
             if ( v_OnLineCount != null && v_OnLineCount > 0 )
             {
+                io_License.setOnLineCount(v_OnLineCount + "");
                 if ( i_OnLineCount == null )
                 {
                     return -5;
@@ -268,10 +276,15 @@ public class License extends SerializableDef
                     return -5;
                 }
             }
+            else
+            {
+                io_License.setOnLineCount("0");
+            }
             
             Integer v_MaxCount = Integer.parseInt(v_Symmetric.decrypt(io_License.getMaxCount()));
             if ( v_MaxCount != null && v_MaxCount > 0 )
             {
+                io_License.setMaxCount(v_MaxCount + "");
                 if ( i_MaxCount == null )
                 {
                     return -6;
@@ -281,6 +294,10 @@ public class License extends SerializableDef
                 {
                     return -6;
                 }
+            }
+            else
+            {
+                io_License.setMaxCount("0");
             }
 
             io_License.setTime(v_Time.getFull());

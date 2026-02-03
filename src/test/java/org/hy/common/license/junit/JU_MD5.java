@@ -1,6 +1,10 @@
 package org.hy.common.license.junit;
 
+import java.io.IOException;
+
+import org.hy.common.file.FileHelp;
 import org.hy.common.license.Hash;
+import org.hy.common.license.IHash;
 import org.hy.common.license.md5.MD5_V1;
 import org.hy.common.license.md5.MD5_V2;
 import org.hy.common.license.md5.MD5_V3;
@@ -65,6 +69,19 @@ public class JU_MD5
     public void test_SMS()
     {
         System.out.println("MD5_SMS = " + (new Hash(1 ,4 ,null)).encrypt("yanfa001SMmsEncryptKey"));
+    }
+    
+    
+    
+    @Test
+    public void test_File() throws ClassNotFoundException, IOException
+    {
+        FileHelp v_FHelp   = new FileHelp();
+        String   v_File    = "C:\\Users\\ZLX\\Desktop\\郑伟.docx";
+        String   v_Content = v_FHelp.getContent(v_File);
+        IHash    v_MD5     = new Hash();
+        
+        System.out.println(v_MD5.encrypt(v_Content));
     }
     
 }
