@@ -17,7 +17,6 @@ import org.hy.common.xml.annotation.Xjava;
 // import org.hy.common.xml.annotation.Xjava;
 import org.hy.common.xml.log.Logger;
 import org.junit.FixMethodOrder;
-import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 
