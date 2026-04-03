@@ -1,5 +1,6 @@
 package org.hy.common.license;
 
+import org.hy.common.Help;
 import org.hy.common.StringHelp;
 
 
@@ -23,7 +24,7 @@ public class ApiKey
     /** 验证票据号 */
     private String token;
     
-    /** ApiKey密钥 */
+    /** ApiKey密钥。读取一次后数据就清空 */
     private String key;
     
     /** 密钥名称。如：sk-...1234 */
@@ -58,15 +59,17 @@ public class ApiKey
      */
     public static synchronized ApiKey make(int i_Length)
     {
+        int    v_Len    = Help.max(i_Length ,10);
         ApiKey v_ApiKey = new ApiKey();
-        v_ApiKey.setKey("sk-" + StringHelp.random(i_Length - 3 ,true ,true));
-        v_ApiKey.setKeyName("sk-..." + v_ApiKey.getKey().substring(i_Length - 4));
+        
+        v_ApiKey.setKey("sk-" + StringHelp.random(v_Len - 3 ,true ,true));
+        v_ApiKey.setKeyName("sk-..." + v_ApiKey.key.substring(v_Len - 4));
         
         if ( $Hash == null )
         {
             $Hash = new Hash();
         }
-        v_ApiKey.setToken($Hash.encrypt(v_ApiKey.getKey()));
+        v_ApiKey.setToken($Hash.encrypt(v_ApiKey.key));
         return v_ApiKey;
     }
     
@@ -85,18 +88,20 @@ public class ApiKey
      * 
      * @param i_Token 验证票据号
      */
-    public void setToken(String i_Token)
+    private void setToken(String i_Token)
     {
         this.token = i_Token;
     }
 
     
     /**
-     * 获取：ApiKey密钥
+     * 获取：ApiKey密钥。读取一次后数据就清空
      */
     public String getKey()
     {
-        return key;
+        String v_Key = this.key;
+        this.key = "";
+        return v_Key;
     }
 
 
@@ -105,7 +110,7 @@ public class ApiKey
      * 
      * @param i_Key ApiKey密钥
      */
-    public void setKey(String i_Key)
+    private void setKey(String i_Key)
     {
         this.key = i_Key;
     }
@@ -125,7 +130,7 @@ public class ApiKey
      * 
      * @param i_KeyName 密钥名称。如：sk-...1234
      */
-    public void setKeyName(String i_KeyName)
+    private void setKeyName(String i_KeyName)
     {
         this.keyName = i_KeyName;
     }

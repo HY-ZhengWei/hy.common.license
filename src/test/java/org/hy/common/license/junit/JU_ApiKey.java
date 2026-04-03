@@ -22,6 +22,7 @@ public class JU_ApiKey
     {
         ApiKey v_ApiKey = ApiKey.make();
         System.out.println(" Api Key：" + v_ApiKey.getKey());
+        System.out.println(" Api Key：" + v_ApiKey.getKey());
         System.out.println("Key Name：" + v_ApiKey.getKeyName());
         System.out.println("   Token：" + v_ApiKey.getToken());
     }
