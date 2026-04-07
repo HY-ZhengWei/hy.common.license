@@ -17,7 +17,7 @@ import org.hy.common.StringHelp;
 public class ApiKey
 {
     
-    private static IHash $Hash;
+    private static IHash $Hash = new Hash();
     
     
     
@@ -41,7 +41,7 @@ public class ApiKey
      *
      * @return
      */
-    public static synchronized ApiKey make()
+    public static ApiKey make()
     {
         return make(35);
     }
@@ -57,7 +57,7 @@ public class ApiKey
      * @param i_Length  ApiKey密钥总长度
      * @return
      */
-    public static synchronized ApiKey make(int i_Length)
+    public static ApiKey make(int i_Length)
     {
         int    v_Len    = Help.max(i_Length ,10);
         ApiKey v_ApiKey = new ApiKey();
@@ -65,13 +65,26 @@ public class ApiKey
         v_ApiKey.setKey("sk-" + StringHelp.random(v_Len - 3 ,true ,true));
         v_ApiKey.setKeyName("sk-..." + v_ApiKey.key.substring(v_Len - 4));
         
-        if ( $Hash == null )
-        {
-            $Hash = new Hash();
-        }
-        v_ApiKey.setToken($Hash.encrypt(v_ApiKey.key));
+        v_ApiKey.setToken(calcToken(v_ApiKey.key));
         return v_ApiKey;
     }
+    
+    
+    
+    /**
+     * 计算出用于验证的票据号
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2026-04-07
+     * @version     v1.0
+     *
+     * @param i_Key  ApiKey密钥
+     */
+    public static String calcToken(String i_Key)
+    {
+        return $Hash.encrypt(i_Key);
+    }
+    
     
     
     /**
