@@ -59,11 +59,34 @@ public class ApiKey
      */
     public static ApiKey make(int i_Length)
     {
-        int    v_Len    = Help.max(i_Length ,10);
+        int v_Len = Help.max(i_Length ,10);
+        return make("sk-" + StringHelp.random(v_Len - 3 ,true ,true));
+    }
+    
+    
+    
+    /**
+     * 生成ApiKey密钥（延用之前的密钥）
+     * 
+     * @author      ZhengWei(HY)
+     * @createDate  2026-04-09
+     * @version     v1.0
+     *
+     * @param i_ApiKey  ApiKey密钥
+     * @return
+     */
+    public static ApiKey make(String i_ApiKey)
+    {
+        if ( Help.isNull(i_ApiKey) || i_ApiKey.length() < 10 )
+        {
+            throw new RuntimeException("ApiKey is null or length < 10");
+        }
+        
+        int    v_Len    = i_ApiKey.length();
         ApiKey v_ApiKey = new ApiKey();
         
-        v_ApiKey.setKey("sk-" + StringHelp.random(v_Len - 3 ,true ,true));
-        v_ApiKey.setKeyName("sk-..." + v_ApiKey.key.substring(v_Len - 4));
+        v_ApiKey.setKey(i_ApiKey);
+        v_ApiKey.setKeyName(v_ApiKey.key.substring(0 ,3) + "..." + v_ApiKey.key.substring(v_Len - 4));
         
         v_ApiKey.setToken(calcToken(v_ApiKey.key));
         return v_ApiKey;
