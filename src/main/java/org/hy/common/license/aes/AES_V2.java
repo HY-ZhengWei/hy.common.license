@@ -21,9 +21,9 @@ import org.hy.common.license.base64.Base64Factory;
 public final class AES_V2 implements IAES
 {
     
-    private static final String $AES_Cipher  = "AES/CBC/PKCS5Padding";
+    private static final String $AES_Cipher = "AES/CBC/PKCS5Padding";
     
-    private static final String $Key         = "1234567890ABCDEF";
+    private static final String $Key        = "1234567890ABCDEF";
     
     
     
@@ -33,14 +33,40 @@ public final class AES_V2 implements IAES
     
     
     
+    /**
+     * 构造器
+     *
+     * @author      ZhengWei(HY)
+     * @createDate  2020-09-16
+     * @version     v1.0
+     *
+     * @param i_PrivateKey  私钥
+     */
     public AES_V2(String i_PrivateKey)
+    {
+        this(i_PrivateKey ,16);
+    }
+    
+    
+    
+    /**
+     * 构造器
+     *
+     * @author      ZhengWei(HY)
+     * @createDate  2026-04-09
+     * @version     v1.0
+     *
+     * @param i_PrivateKey      私钥
+     * @param i_PasswordLevel  密钥等级。可选值为：16/24/32
+     */
+    public AES_V2(String i_PrivateKey ,int i_PasswordLevel)
     {
         try
         {
-            String v_PrivateKey = StringHelp.rpad(i_PrivateKey ,16 ," ");
+            String v_PrivateKey = StringHelp.rpad(i_PrivateKey ,i_PasswordLevel ," ");
             
             IvParameterSpec v_ParamSpec = new IvParameterSpec($Key.getBytes());  // 初始向量
-            SecretKeySpec   v_KeySpec   = new SecretKeySpec(v_PrivateKey.substring(0 ,16).getBytes(), $AES_Name);
+            SecretKeySpec   v_KeySpec   = new SecretKeySpec(v_PrivateKey.substring(0 ,i_PasswordLevel).getBytes(), $AES_Name);
             
             this.cipherEncrypt = Cipher.getInstance($AES_Cipher);
             this.cipherDecrypt = Cipher.getInstance($AES_Cipher);

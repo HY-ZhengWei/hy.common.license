@@ -2,6 +2,7 @@ package org.hy.common.license;
 
 import org.hy.common.license.aes.AES_V1;
 import org.hy.common.license.aes.AES_V2;
+import org.hy.common.license.aes.AES_V3;
 import org.hy.common.license.aes.IAES;
 
 
@@ -20,6 +21,7 @@ import org.hy.common.license.aes.IAES;
  * @createDate  2020-04-26
  * @version     v1.0
  *              v2.0  2020-09-16  添加：AES加解密版本2：用于解决Android手机与Java服务AES版本1加密结果不一样的问题。
+ *              v3.0  2026-04-09  添加：AES加解密的24/32位的两个版本
  */
 public final class AES implements ISymmetric
 {
@@ -63,6 +65,26 @@ public final class AES implements ISymmetric
         else if ( i_Version == 2 )
         {
             this.aes = new AES_V2(i_PrivateKey);
+        }
+        else if ( i_Version == 3 )
+        {
+            this.aes = new AES_V2(i_PrivateKey ,24);
+        }
+        else if ( i_Version == 4 )
+        {
+            this.aes = new AES_V2(i_PrivateKey ,32);
+        }
+        else if ( i_Version == 11 )
+        {
+            this.aes = new AES_V3(i_PrivateKey ,16);
+        }
+        else if ( i_Version == 12 )
+        {
+            this.aes = new AES_V3(i_PrivateKey ,24);
+        }
+        else if ( i_Version == 13 )
+        {
+            this.aes = new AES_V3(i_PrivateKey ,32);
         }
     }
     
